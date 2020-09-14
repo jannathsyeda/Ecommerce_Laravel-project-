@@ -44,8 +44,13 @@
           
           @foreach($category as $row)
           <option value="{{ $row->id }}"
-      <?php if ($row->id == $subcat->category_id ) {
-       echo "selected"; } ?> >{{ $row->category_name }}  </option> 
+      <?php 
+            if ($row->id == $subcat->category_id ) 
+            {
+                   echo "selected"; 
+            }
+        ?> >
+        {{ $row->category_name }}  </option> 
           @endforeach
 
           </select>

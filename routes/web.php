@@ -45,3 +45,38 @@ Route::get('delete/subcategory/{id}', 'Admin\Category\SubCategoryController@Dele
 Route::get('edit/subcategory/{id}', 'Admin\Category\SubCategoryController@EditSubcat');
 
 Route::post('update/subcategory/{id}', 'Admin\Category\SubCategoryController@UpdateSubcat');
+
+// Coupons All 
+Route::get('admin/sub/coupon', 'Admin\Category\CouponController@Coupon')->name('admin.coupon');
+Route::post('admin/store/coupon', 'Admin\Category\CouponController@StoreCoupon')->name('store.coupon');
+Route::get('delete/coupon/{id}', 'Admin\Category\CouponController@DeleteCoupon');
+Route::get('edit/coupon/{id}', 'Admin\Category\CouponController@EditCoupon');
+Route::post('update/coupon/{id}', 'Admin\Category\CouponController@UpdateCoupon');
+
+// Newslater
+
+Route::get('admin/newslater', 'Admin\Category\CouponController@Newslater')->name('admin.newslater');
+Route::get('delete/sub/{id}', 'Admin\Category\CouponController@DeleteSub');
+
+// Frontend All Routes
+Route::post('store/newslater', 'FrontController@StoreNewslater')->name('store.newslater');
+
+
+// For Show Sub category with ajax
+Route::get('get/subcategory/{category_id}', 'Admin\ProductController@GetSubcat');
+
+// Product All Route
+// Route::get('admin/product/all', 'Admin\ProductController@index')->name('all.product');
+Route::get('admin/product/add', 'Admin\ProductController@create')->name('add.product');
+Route::post('admin/store/product', 'Admin\ProductController@store')->name('store.product');
+
+// Route::get('inactive/product/{id}', 'Admin\ProductController@inactive');
+// Route::get('active/product/{id}', 'Admin\ProductController@active');
+// Route::get('delete/product/{id}', 'Admin\ProductController@DeleteProduct');
+
+// Route::get('view/product/{id}', 'Admin\ProductController@ViewProduct');
+// Route::get('edit/product/{id}', 'Admin\ProductController@EditProduct');
+
+// Route::post('update/product/withoutphoto/{id}', 'Admin\ProductController@UpdateProductWithoutPhoto');
+
+// Route::post('update/product/photo/{id}', 'Admin\ProductController@UpdateProductPhoto');
