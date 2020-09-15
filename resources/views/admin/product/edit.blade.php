@@ -1,8 +1,17 @@
 @extends('admin.admin_layouts')
 
- 
+  
 
 @section('admin_content')
+
+ @php
+  $category = DB::table('categories')->get();
+  $brand = DB::table('brands')->get();
+  $subcategory = DB::table('subcategories')->get();
+
+ @endphp
+
+
   <!-- ########## START: MAIN PANEL ########## -->
     <div class="sl-mainpanel">
       <nav class="breadcrumb sl-breadcrumb">
@@ -12,14 +21,13 @@
 
       <div class="sl-pagebody">
 
- 
  <div class="card pd-20 pd-sm-40">
-          <h6 class="card-body-title">New Product ADD
+          <h6 class="card-body-title">Update Product 
  <a href="{{ route('all.product')}}" class="btn btn-success btn-sm pull-right"> All Product</a>
           </h6>
-          <p class="mg-b-20 mg-sm-b-30">New Prodcut Add From</p>
+          <p class="mg-b-20 mg-sm-b-30">Update Prodcut From</p>
 
-       <form method="post" action="{{ route('store.product')}}" enctype="multipart/form-data">    
+       <form method="post" action="{{ url('update/product/withoutphoto/'.$product->id) }} " enctype="multipart/form-data">    
         @csrf
 
           <div class="form-layout">
@@ -27,29 +35,29 @@
               <div class="col-lg-6">
                 <div class="form-group">
                   <label class="form-control-label">Product Name: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="product_name"  placeholder="Enter Product Name">
+                  <input class="form-control" type="text" name="product_name" value="{{ $product->product_name }}" >
                 </div>
               </div><!-- col-4 -->
               <div class="col-lg-6">
                 <div class="form-group">
                   <label class="form-control-label">Product Code: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="product_code"  placeholder="Enter Product Code">
+                  <input class="form-control" type="text" name="product_code"  value="{{ $product->product_code }}">
                 </div>
               </div><!-- col-4 -->
               <div class="col-lg-6">
                 <div class="form-group">
                   <label class="form-control-label">Quantity: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="product_quantity"  placeholder="product quantity">
+                  <input class="form-control" type="text" name="product_quantity" value="{{ $product->product_quantity }}" >
                 </div>
               </div><!-- col-4 -->
 
-
-               <div class="col-lg-6">
+ <div class="col-lg-6">
                 <div class="form-group">
                   <label class="form-control-label">Discount Price: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="discount_price"  placeholder="Discount Price">
+                  <input class="form-control" type="text" name="discount_price" value="{{ $product->discount_price }}" >
                 </div>
               </div><!-- col-4 -->
+
 
                
               <div class="col-lg-4">
@@ -58,7 +66,8 @@
        <select class="form-control select2" data-placeholder="Choose country" name="category_id">
                     <option label="Choose Category"></option>
                     @foreach($category as $row)
-                    <option value="{{ $row->id }}">{{ $row->category_name }}</option>
+                    <option value="{{ $row->id }}" <?php if ($row->id == $product->category_id) {
+                     echo "selected"; } ?> > {{ $row->category_name }}</option>
                     @endforeach
                   </select>
                 </div>
@@ -68,7 +77,11 @@
               <div class="col-lg-4">
                 <div class="form-group mg-b-10-force">
                   <label class="form-control-label">Sub Category: <span class="tx-danger">*</span></label>
-       <select class="form-control select2" data-placeholder="Choose country" name="subcategory_id">
+       <select class="form-control select2"  name="subcategory_id">
+         @foreach($subcategory as $row)
+                    <option value="{{ $row->id }}" <?php if ($row->id == $product->subcategory_id) {
+                     echo "selected"; } ?> > {{ $row->subcategory_name }}</option>
+                    @endforeach
                      
                   </select>
                 </div>
@@ -83,8 +96,9 @@
                     <option label="Choose Brand"></option>
 
                     @foreach($brand as $br)
-                    <option value="{{ $br->id }}">{{ $br->brand_name }}</option>
-                     @endforeach
+                    <option value="{{ $br->id }}" <?php if ($br->id == $product->brand_id) {
+                     echo "selected"; } ?> > {{ $br->brand_name }}</option>
+                    @endforeach
                   </select>
                 </div>
               </div><!-- col-4 -->
@@ -93,21 +107,21 @@
 <div class="col-lg-4">
                 <div class="form-group">
                   <label class="form-control-label">Product Size: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="product_size" id="size" data-role="tagsinput"  >
+                  <input class="form-control" type="text" name="product_size" id="size" data-role="tagsinput" value="{{ $product->product_size }}"  >
                 </div>
               </div><!-- col-4 -->
 
 <div class="col-lg-4">
                 <div class="form-group">
                   <label class="form-control-label">Product Color: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="product_color" id="color" data-role="tagsinput"  >
+                  <input class="form-control" type="text" name="product_color" id="color" data-role="tagsinput" value="{{ $product->product_color }}" >
                 </div>
               </div><!-- col-4 -->
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label class="form-control-label">Selling Price: <span class="tx-danger">*</span></label>
-                  <input class="form-control" type="text" name="selling_price" placeholder="Selling Price" >
+                  <input class="form-control" type="text" name="selling_price" placeholder="Selling Price" value="{{ $product->selling_price }}" >
                 </div>
               </div><!-- col-4 -->
 
@@ -117,7 +131,7 @@
                   <label class="form-control-label">Product Details: <span class="tx-danger">*</span></label>
   
             <textarea class="form-control" id="summernote"  name="product_details"> 
-
+                 {{ $product->product_details }}
              </textarea>
                    
                 </div>
@@ -126,51 +140,12 @@
                 <div class="col-lg-12">
                 <div class="form-group">
                   <label class="form-control-label">Video Link: <span class="tx-danger">*</span></label>
-                  <input class="form-control" name="video_link" placeholder="Video Link" >
+                  <input class="form-control" name="video_link" value="{{ $product->video_link }}"  >
                 </div>
               </div><!-- col-4 -->
 
 
 
- <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label">Image One ( Main Thumbnali): <span class="tx-danger">*</span></label>
-                 <label class="custom-file">
-          <input type="file" id="file" class="custom-file-input" name="image_one" onchange="readURL(this);" required="">
-          <span class="custom-file-control"></span>
-          <img src="#" id="one">
-            </label>
-
-                </div>
-              </div><!-- col-4 -->
-
-
-               <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label">Image Two: <span class="tx-danger">*</span></label>
-                 <label class="custom-file">
-          <input type="file" id="file" class="custom-file-input" name="image_two" onchange="readURL2(this);" required="">
-          <span class="custom-file-control"></span>
-          <img src="#" id="two">
-            </label>
-
-                </div>
-              </div><!-- col-4 -->
-
-
-
-
- <div class="col-lg-4">
-                <div class="form-group">
-                  <label class="form-control-label">Image Three: <span class="tx-danger">*</span></label>
-                 <label class="custom-file">
-          <input type="file" id="file" class="custom-file-input" name="image_three" onchange="readURL3(this);" required="">
-          <span class="custom-file-control"></span>
-          <img src="#" id="three">
-            </label>
-
-                </div>
-              </div><!-- col-4 --> 
 
             </div><!-- row -->
 
@@ -181,7 +156,7 @@
 
         <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="main_slider" value="1">
+    <input type="checkbox" name="main_slider" value="1" <?php if ($product->main_slider == 1) { echo "checked"; } ?> >
           <span>Main Slider</span>
         </label>
 
@@ -189,7 +164,8 @@
 
          <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="hot_deal" value="1">
+           <input type="checkbox" name="hot_deal" value="1" <?php if ($product->hot_deal == 1) { echo "checked"; } ?> >
+           
           <span>Hot Deal</span>
         </label>
 
@@ -199,7 +175,8 @@
 
          <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="best_rated" value="1">
+           <input type="checkbox" name="best_rated" value="1" <?php if ($product->best_rated == 1) { echo "checked"; } ?> >
+          
           <span>Best Rated</span>
         </label>
 
@@ -208,7 +185,8 @@
 
          <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="trend" value="1">
+           <input type="checkbox" name="trend" value="1" <?php if ($product->trend == 1) { echo "checked"; } ?> >
+           
           <span>Trend Product </span>
         </label>
 
@@ -216,7 +194,8 @@
 
  <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="mid_slider" value="1">
+           <input type="checkbox" name="mid_slider" value="1" <?php if ($product->mid_slider == 1) { echo "checked"; } ?> >
+          
           <span>Mid Slider</span>
         </label>
 
@@ -224,17 +203,18 @@
 
 <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="hot_new" value="1">
+          <input type="checkbox" name="hot_new" value="1" <?php if ($product->hot_new == 1) { echo "checked"; } ?> >
+          
           <span>Hot New </span>
         </label>
 
         </div> <!-- col-4 --> 
 
-
         <div class="col-lg-4">
         <label class="ckbox">
-          <input type="checkbox" name="buyone_getone" value="1">
-          <span>Buyone Getone</span>
+          <input type="checkbox" name="buyone_getone" value="1" <?php if ($product->buyone_getone == 1) { echo "checked"; } ?> >
+          
+          <span>Buyone Getone </span>
         </label>
 
         </div> <!-- col-4 --> 
@@ -245,20 +225,86 @@
 
 
             <div class="form-layout-footer">
-              <button class="btn btn-info mg-r-5">Submit Form</button>
-              <button class="btn btn-secondary">Cancel</button>
+              <button class="btn btn-info mg-r-5">Update Product</button>
+              
             </div><!-- form-layout-footer -->
           </div><!-- form-layout -->
         </div><!-- card -->
 
-        </form> 
-
-
-
+        </form>  
         
         </div><!-- row -->
 
   
+
+
+ <div class="sl-pagebody">
+
+ <div class="card pd-20 pd-sm-40">
+          <h6 class="card-body-title">Update Images  </h6>
+  <form method="post" action="{{ url('update/product/photo/'.$product->id) }} " enctype="multipart/form-data">    
+        @csrf
+
+
+  <div class="row"> 
+ <div class="col-lg-6 col-sm-6">
+                 
+   <label class="form-control-label">Image One ( Main Thumbnali): <span class="tx-danger">*</span></label><br>
+                 <label class="custom-file">
+          <input type="file" id="file" class="custom-file-input" name="image_one" onchange="readURL(this);" >
+          <span class="custom-file-control"></span>
+          <input type="hidden" name="old_one" value="{{ $product->image_one }}">
+          <img src="#" id="one">
+            </label>
+             </div>
+         
+          <div class="col-lg-6 col-sm-6">
+  <img src=" {{ URL::to($product->image_one) }} " style="width: 80px; height: 80px;">               
+                 </div>
+              
+              </div><!-- col-4 -->
+
+<div class="row"> 
+ <div class="col-lg-6 col-sm-6">
+               
+                  <label class="form-control-label">Image Two: <span class="tx-danger">*</span></label><br>
+                 <label class="custom-file">
+          <input type="file" id="file" class="custom-file-input" name="image_two" onchange="readURL2(this);"  >
+          <span class="custom-file-control"></span>
+           <input type="hidden" name="old_two" value="{{ $product->image_two }}">
+          <img src="#" id="two">
+            </label>
+          </div>
+
+    <div class="col-lg-6 col-sm-6">
+  <img src=" {{ URL::to($product->image_two) }} " style="width: 80px; height: 80px;">               
+                 </div> 
+              </div><!-- col-4 -->
+
+ 
+ <div class="row"> 
+ <div class="col-lg-6 col-sm-6">
+               
+                  <label class="form-control-label">Image Three: <span class="tx-danger">*</span></label><br>
+                 <label class="custom-file">
+          <input type="file" id="file" class="custom-file-input" name="image_three" onchange="readURL3(this);"  >
+          <span class="custom-file-control"></span>
+           <input type="hidden" name="old_three" value="{{ $product->image_three }}">
+          <img src="#" id="three">
+            </label>
+          </div>
+          <div class="col-lg-6 col-sm-6">
+  <img src=" {{ URL::to($product->image_three) }} " style="width: 80px; height: 80px;">               
+                 </div>  
+              </div><!-- col-4 --> 
+
+ <button type="submit" class="btn btn-sm btn-warning"> Update Photo</button>
+  </form>
+ 
+ </div>
+ </div>
+
+
     </div><!-- sl-mainpanel -->
     <!-- ########## END: MAIN PANEL ########## -->
  
@@ -343,3 +389,4 @@
 </script>
 
 @endsection
+

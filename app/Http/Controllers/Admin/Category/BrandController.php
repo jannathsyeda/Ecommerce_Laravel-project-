@@ -78,12 +78,12 @@ class BrandController extends Controller
 
   public function UpdateBrand(Request $request, $id){
 
- $oldlogo = $request->old_logo;
-$data = array();
+ 	$oldlogo = $request->old_logo;
+	$data = array();
  	$data['brand_name'] = $request->brand_name;
- 	$image = $request->file('brand_logo');
+	$image = $request->file('brand_logo');
  	if ($image) {
- 		unlink($oldlogo);
+ 		 unlink($oldlogo);
  	  $image_name = date('dmy_H_s_i');
  	  $ext = strtolower($image->getClientOriginalExtension());
  	  $image_full_name = $image_name.'.'.$ext;
