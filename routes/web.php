@@ -80,3 +80,22 @@ Route::get('edit/product/{id}', 'Admin\ProductController@EditProduct');
 Route::post('update/product/withoutphoto/{id}', 'Admin\ProductController@UpdateProductWithoutPhoto');
 
 Route::post('update/product/photo/{id}', 'Admin\ProductController@UpdateProductPhoto');
+
+// Blog Admin All
+
+Route::get('blog/category/list', 'Admin\PostController@BlogCatList')->name('add.blog.categorylist');
+Route::post('admin/store/blog', 'Admin\PostController@BlogCatStore')->name('store.blog.category');
+Route::get('delete/blogcategory/{id}', 'Admin\PostController@DeleteBlogCat');
+Route::get('edit/blogcategory/{id}', 'Admin\PostController@EditBlogCat');
+Route::post('update/blog/category/{id}', 'Admin\PostController@UpdateBlogCat');
+
+
+Route::get('admin/add/post', 'Admin\PostController@Create')->name('add.blogpost');
+Route::get('admin/all/post', 'Admin\PostController@index')->name('all.blogpost');
+
+Route::post('admin/store/post', 'Admin\PostController@store')->name('store.post');
+
+Route::get('delete/post/{id}', 'Admin\PostController@DeletePost');
+Route::get('edit/post/{id}', 'Admin\PostController@EditPost');
+
+Route::post('update/post/{id}', 'Admin\PostController@UpdatePost');
