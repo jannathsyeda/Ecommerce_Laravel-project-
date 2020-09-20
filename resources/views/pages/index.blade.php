@@ -4,6 +4,9 @@
 
 @include('layouts.menubar')
 
+@include('layouts.slider')
+
+
 @php
  $featured = DB::table('products')->where('status',1)->orderBy('id','desc')->limit(12)->get();
 
@@ -175,7 +178,7 @@
                             <div class="tabs">
                                 <ul class="clearfix">
                                     <li class="active">Featured</li>
-                                    <li>On Sale</li>
+                                    <li>Trend</li>
                                     <li>Best Rated</li>
                                 </ul>
                                 <div class="tabs_line"><span></span></div>

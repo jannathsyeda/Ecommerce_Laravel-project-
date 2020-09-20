@@ -205,7 +205,7 @@ $category = DB::table('categories')->get();
 
 <!-- Banner -->
 
-<div class="banner">
+<!-- <div class="banner">
 <div class="banner_background" style="background-image:url({{ asset('public/frontend/images/banner_background.jpg')}})"></div>
 <div class="container fill_height">
     <div class="row fill_height">
@@ -220,5 +220,5 @@ $category = DB::table('categories')->get();
         </div>
     </div>
 </div>
-</div>
+</div> -->
 
