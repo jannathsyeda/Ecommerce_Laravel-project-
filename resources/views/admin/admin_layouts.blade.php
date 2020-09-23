@@ -40,6 +40,8 @@
 <link href="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet"/>
 
  <!-- chart -->
+  <!-- toster css -->
+
          <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
 
 <!-- Datatable css -->
