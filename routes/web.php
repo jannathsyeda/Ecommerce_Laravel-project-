@@ -62,10 +62,6 @@ Route::post('update/coupon/{id}', 'Admin\Category\CouponController@UpdateCoupon'
 Route::get('admin/newslater', 'Admin\Category\CouponController@Newslater')->name('admin.newslater');
 Route::get('delete/sub/{id}', 'Admin\Category\CouponController@DeleteSub');
 
-// Frontend All Routes
-Route::post('store/newslater', 'FrontController@StoreNewslater')->name('store.newslater');
-
-
 // For Show Sub category with ajax
 Route::get('get/subcategory/{category_id}', 'Admin\ProductController@GetSubcat');
 
@@ -103,3 +99,9 @@ Route::get('delete/post/{id}', 'Admin\PostController@DeletePost');
 Route::get('edit/post/{id}', 'Admin\PostController@EditPost');
 
 Route::post('update/post/{id}', 'Admin\PostController@UpdatePost');
+
+// Frontend All Routes
+Route::post('store/newslater', 'FrontController@StoreNewslater')->name('store.newslater');
+
+// ADD Wishlist
+Route::get('add/wishlist/{id}', 'WishlistController@addWishlist');
