@@ -178,8 +178,7 @@
                             <div class="tabs">
                                 <ul class="clearfix">
                                     <li class="active">Featured</li>
-                                    <li>Trend</li>
-                                    <li>Best Rated</li>
+                                   
                                 </ul>
                                 <div class="tabs_line"><span></span></div>
                             </div>
@@ -255,149 +254,11 @@
 
                             <!-- Product Panel -->
 
-                            <div class="product_panel panel">
-                                <div class="featured_slider slider">
-
-                                    <!-- Slider Item -->
-                                   
-                                    @foreach($trend as $row)
-    <!-- Slider Item -->
-    <div class="featured_slider_item">
-        <div class="border_active"></div>
-        <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
-            <div class="product_image d-flex flex-column align-items-center justify-content-center"><img src="{{ asset( $row->image_one )}}" alt="" style="height: 120px; width: 100px;"></div>
-            <div class="product_content">
-
-      @if($row->discount_price == NULL)
-<div class="product_price discount">${{ $row->selling_price }}<span> </div>
-      @else
-<div class="product_price discount">${{ $row->discount_price }}<span>${{ $row->selling_price }}</span></div>
-      @endif
-
-
-                
-<div class="product_name"><div><a href="{{ url('product/details/'.$row->id.'/'.$row->product_name) }}">{{ $row->product_name }}</a></div></div>
-                
-
-              <!--   <div class="product_extras">
-                      
-     <button class="product_cart_button addcart" data-id="{{ $row->id }}">Add to Cart</button>
-                </div>
-            </div> -->
-
-            <div class="product_extras">
-                      
-     <button id="{{ $row->id }}" class="product_cart_button addcart" data-toggle="modal" data-target="#cartmodal" onclick="productview(this.id)">Add to Cart</button>
-                </div>
-            </div>
-
-
-             <button class="addwishlist" data-id="{{ $row->id }}" >
-            <div class="product_fav"><i class="fas fa-heart"></i></div>
-            </button>
-            
-
-            <ul class="product_marks">
-       @if($row->discount_price == NULL)
-       <li class="product_mark product_discount" style="background: blue;">New</li>
-       @else
-                       <li class="product_mark product_discount">
-                       @php
-                         $amount = $row->selling_price - $row->discount_price;
-                         $discount = $amount/$row->selling_price*100;
-
-                       @endphp
-                       
-                       {{ intval($discount) }}%
-
-                      </li> 
-       @endif
-
-               
-                 
-            </ul>
-        </div>
-    </div>
-    @endforeach
-
-                                 
-                                </div>
-                                <div class="featured_slider_dots_cover"></div>
-                            </div>
+                          
 
                             <!-- Product Panel -->
 
-                            <div class="product_panel panel">
-                                <div class="featured_slider slider">
-
-                                                                   <!-- Slider Item -->
-                                   
-                                    @foreach($best as $row)
-    <!-- Slider Item -->
-    <div class="featured_slider_item">
-        <div class="border_active"></div>
-        <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
-            <div class="product_image d-flex flex-column align-items-center justify-content-center"><img src="{{ asset( $row->image_one )}}" alt="" style="height: 120px; width: 100px;"></div>
-            <div class="product_content">
-
-      @if($row->discount_price == NULL)
-<div class="product_price discount">${{ $row->selling_price }}<span> </div>
-      @else
-<div class="product_price discount">${{ $row->discount_price }}<span>${{ $row->selling_price }}</span></div>
-      @endif
-
-
-                
-<div class="product_name"><div><a href="{{ url('product/details/'.$row->id.'/'.$row->product_name) }}">{{ $row->product_name }}</a></div></div>
-                
-
-              <!--   <div class="product_extras">
-                      
-     <button class="product_cart_button addcart" data-id="{{ $row->id }}">Add to Cart</button>
-                </div>
-            </div> -->
-
-            <div class="product_extras">
-                      
-     <button id="{{ $row->id }}" class="product_cart_button addcart" data-toggle="modal" data-target="#cartmodal" onclick="productview(this.id)">Add to Cart</button>
-                </div>
-            </div>
-
-
-             <button class="addwishlist" data-id="{{ $row->id }}" >
-            <div class="product_fav"><i class="fas fa-heart"></i></div>
-            </button>
-            
-
-            <ul class="product_marks">
-       @if($row->discount_price == NULL)
-       <li class="product_mark product_discount" style="background: blue;">New</li>
-       @else
-                       <li class="product_mark product_discount">
-                       @php
-                         $amount = $row->selling_price - $row->discount_price;
-                         $discount = $amount/$row->selling_price*100;
-
-                       @endphp
-                       
-                       {{ intval($discount) }}%
-
-                      </li> 
-       @endif
-
-               
-                 
-            </ul>
-        </div>
-    </div>
-    @endforeach
-
-
-                                 
-
-                                </div>
-                                <div class="featured_slider_dots_cover"></div>
-                            </div>
+                           
 
                         </div>
                     </div>
@@ -525,7 +386,7 @@
                         <div class="tabs_line"><span></span></div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-9" style="z-index:1;">
+                        <div class="col-lg-12" style="z-index:1;">
 
                             <!-- Product Panel -->
                             <div class="product_panel panel active">
@@ -1750,26 +1611,7 @@
 
                         </div>
 
-                        <div class="col-lg-3">
-                            <div class="arrivals_single clearfix">
-                                <div class="d-flex flex-column align-items-center justify-content-center">
-                                    <div class="arrivals_single_image"><img src="{{ asset('public/frontend/images/new_single.png')}}" alt=""></div>
-                                    <div class="arrivals_single_content">
-                                        <div class="arrivals_single_category"><a href="#">Smartphones</a></div>
-                                        <div class="arrivals_single_name_container clearfix">
-                                            <div class="arrivals_single_name"><a href="#">LUNA Smartphone</a></div>
-                                            <div class="arrivals_single_price text-right">$379</div>
-                                        </div>
-                                        <div class="rating_r rating_r_4 arrivals_single_rating"><i></i><i></i><i></i><i></i><i></i></div>
-                                        <form action="#"><button class="arrivals_single_button">Add to Cart</button></form>
-                                    </div>
-                                    <div class="arrivals_single_fav product_fav active"><i class="fas fa-heart"></i></div>
-                                    <ul class="arrivals_single_marks product_marks">
-                                        <li class="arrivals_single_mark product_mark product_new">new</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                    
 
                     </div>
                             
