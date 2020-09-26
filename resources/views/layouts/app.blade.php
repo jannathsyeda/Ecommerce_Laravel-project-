@@ -15,6 +15,14 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/frontend/styles/main_styles.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('public/frontend/styles/responsive.css') }}">
 
+<!-- chart -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
+
+<link rel="stylesheet" href="sweetalert2.min.css">
+
+<script src="https://js.stripe.com/v3/"></script>
+
+@stack('css')
 </head>
 
 <body>
@@ -56,9 +64,22 @@
                                 </ul>
                             </div>
                             <div class="top_bar_user">
-                                <div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div>
-                                <div><a href="{{ route('register') }}">Register</a></div>
-                            <div><a href="{{ route('login') }}">Sign in</a></div>
+                                @guest
+                                <div><a href="{{ route('login') }}"><div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div> Register/Login</a></div>
+                                         @else
+                
+                                    <ul class="standard_dropdown top_bar_dropdown">
+                                                    <li>
+                           <a href="{{ route('home') }}"><div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div> Profile<i class="fas fa-chevron-down"></i></a>
+                                                        <ul>
+                                                            <li><a href="">Wishlist</a></li>
+                                                            <li><a href="">Checkout</a></li>
+                                                            <li><a href="#">Others</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    
+                                                </ul> 
+                                         @endguest
                             </div>
                         </div>
                     </div>
@@ -248,6 +269,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </div>
 </div>
 
+@stack('js')
 <script src="{{ asset('public/frontend/js/jquery-3.3.1.min.js')}}"></script>
 <script src="{{ asset('public/frontend/styles/bootstrap4/popper.js')}}"></script>
 <script src="{{ asset('public/frontend/styles/bootstrap4/bootstrap.min.js')}}"></script>
@@ -260,6 +282,65 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="{{ asset('public/frontend/plugins/slick-1.8.0/slick.js')}}"></script>
 <script src="{{ asset('public/frontend/plugins/easing/easing.js')}}"></script>
 <script src="{{ asset('public/frontend/js/custom.js')}}"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+<script src="{{ asset('public/frontend/js/product_custom.js')}}"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<script src="{{ asset('https://unpkg.com/sweetalert/dist/sweetalert.min.js')}}"></script>
+ 
+
+ <script>
+        @if(Session::has('messege'))
+          var type="{{Session::get('alert-type','info')}}"
+          switch(type){
+              case 'info':
+                   toastr.info("{{ Session::get('messege') }}");
+                   break;
+              case 'success':
+                  toastr.success("{{ Session::get('messege') }}");
+                  break;
+              case 'warning':
+                 toastr.warning("{{ Session::get('messege') }}");
+                  break;
+              case 'error':
+                  toastr.error("{{ Session::get('messege') }}");
+                  break;
+          }
+        @endif
+     </script>  
+
+
+ <script>  
+         $(document).on("click", "#return", function(e){
+             e.preventDefault();
+             var link = $(this).attr("href");
+                swal({
+                  title: "Are you Want to Return?",
+                  text: "Once Teturn, this will return your money!",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                       window.location.href = link;
+                  } else {
+                    swal("Cancel!");
+                  }
+                });
+            });
+    </script>
+
+
+
+
+
+
 </body>
 
 </html>

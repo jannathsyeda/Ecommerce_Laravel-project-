@@ -6,6 +6,11 @@
 
 @include('layouts.slider')
 
+@push('css')
+<link rel="stylesheet" href="sweetalert2.min.css">
+
+@endpush
+
 
 @php
  $featured = DB::table('products')->where('status',1)->orderBy('id','desc')->limit(12)->get();
@@ -214,14 +219,15 @@
 
             <div class="product_extras">
                       
-     <button id="{{ $row->id }}" class="product_cart_button addcart" data-toggle="modal" data-target="#cartmodal" onclick="productview(this.id)">Add to Cart</button>
+     <button id="{{ $row->id }}" class="product_cart_button addcart" 
+        data-toggle="modal" data-target="#cartmodal" onclick="productview(this.id)">Add to Cart</button>
                 </div>
             </div>
 
 
-             <button class="addwishlist" data-id="{{ $row->id }}" >
-            <div class="product_fav"><i class="fas fa-heart"></i></div>
-            </button>
+            <button class="addwishlist" data-id="{{ $row->id }}" >
+                <div class="product_fav"><i class="fas fa-heart"></i></div>
+                </button>
             
 
             <ul class="product_marks">
@@ -4064,4 +4070,137 @@
     </div>
 </div>
 
+@push('js')
+    
+
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+
+
+
+
+<!-- <script type="text/javascript">
+    
+   $(document).ready(function(){
+     $('.addcart').on('click', function(){
+        var id = $(this).data('id');
+        if (id) {
+            $.ajax({
+                {{-- url: " {{ url('/add/to/cart/') }}/"+id, --}}
+                type:"GET",
+                datType:"json",
+                success:function(data){
+             const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  onOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+
+             if ($.isEmptyObject(data.error)) {
+
+                Toast.fire({
+                  icon: 'success',
+                  title: data.success
+                })
+             }else{
+                 Toast.fire({
+                  icon: 'error',
+                  title: data.error
+                })
+             }
+ 
+
+                },
+            });
+
+        }else{
+            alert('danger');
+        }
+     });
+
+   });
+
+
+</script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    
+    // alert('You clicked the button!')
+
+   $(document).ready(function(){
+     $('.addwishlist').on('click', function(){
+        var id = $(this).data('id');
+        if (id) {
+            $.ajax({
+                url: " {{ url('add/wishlist/')}}/"+id ,
+                type:"GET",
+                datType:"json",
+                success:function(data){
+             const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  onOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                  }
+                })
+
+             if ($.isEmptyObject(data.error)) {
+
+                Toast.fire({
+                  icon: 'success',
+                  title: data.success
+                })
+             }else{
+                 Toast.fire({
+                  icon: 'error',
+                  title: data.error
+                })
+             }
+ 
+
+                },
+            });
+
+        }else{
+            alert('danger');
+        }
+     });
+
+   });
+
+
+</script>
+
+
+
+@endpush
+ 
 @endsection
+
+
+

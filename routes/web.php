@@ -104,4 +104,4 @@ Route::post('update/post/{id}', 'Admin\PostController@UpdatePost');
 Route::post('store/newslater', 'FrontController@StoreNewslater')->name('store.newslater');
 
 // ADD Wishlist
-Route::get('add/wishlist/{id}', 'WishlistController@addWishlist');
+Route::get('add/wishlist/{id}', 'WishlistsController@addWishlist');
