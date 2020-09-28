@@ -211,18 +211,18 @@
 <div class="product_name"><div><a href="{{ url('product/details/'.$row->id.'/'.$row->product_name) }}">{{ $row->product_name }}</a></div></div>
                 
 
-              <!--   <div class="product_extras">
+               <div class="product_extras">
                       
      <button class="product_cart_button addcart" data-id="{{ $row->id }}">Add to Cart</button>
                 </div>
-            </div> -->
+            </div> 
 
-            <div class="product_extras">
+            {{-- <div class="product_extras">
                       
      <button id="{{ $row->id }}" class="product_cart_button addcart" 
         data-toggle="modal" data-target="#cartmodal" onclick="productview(this.id)">Add to Cart</button>
                 </div>
-            </div>
+            </div> --}}
 
 
             <button class="addwishlist" data-id="{{ $row->id }}" >
@@ -1716,14 +1716,14 @@ $buyget = DB::table('products')
 
 
 
-<!-- <script type="text/javascript">
+ <script type="text/javascript">
     
    $(document).ready(function(){
      $('.addcart').on('click', function(){
         var id = $(this).data('id');
         if (id) {
             $.ajax({
-                {{-- url: " {{ url('/add/to/cart/') }}/"+id, --}}
+                url: " {{ url('/add/to/cart/') }}/"+id,
                 type:"GET",
                 datType:"json",
                 success:function(data){
@@ -1764,7 +1764,7 @@ $buyget = DB::table('products')
    });
 
 
-</script> -->
+</script> 
 
 
 
@@ -1779,7 +1779,6 @@ $buyget = DB::table('products')
 
 <script type="text/javascript">
     
-    // alert('You clicked the button!')
 
    $(document).ready(function(){
      $('.addwishlist').on('click', function(){

@@ -105,3 +105,7 @@ Route::post('store/newslater', 'FrontController@StoreNewslater')->name('store.ne
 
 // ADD Wishlist
 Route::get('add/wishlist/{id}', 'WishlistsController@addWishlist');
+
+// Add to Cart Route 
+Route::get('add/to/cart/{id}', 'CartController@AddCart');
+Route::get('check', 'CartController@check');
