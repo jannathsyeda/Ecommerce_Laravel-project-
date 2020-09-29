@@ -109,3 +109,5 @@ Route::get('add/wishlist/{id}', 'WishlistsController@addWishlist');
 // Add to Cart Route 
 Route::get('add/to/cart/{id}', 'CartController@AddCart');
 Route::get('check', 'CartController@check');
+
+Route::get('/product/details/{id}/{product_name}', 'ProductController@ProductView');

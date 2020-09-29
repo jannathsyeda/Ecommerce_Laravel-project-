@@ -63,24 +63,23 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="top_bar_user">
-                                @guest
-                                <div><a href="{{ route('login') }}"><div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div> Register/Login</a></div>
-                                         @else
-                
-                                    <ul class="standard_dropdown top_bar_dropdown">
-                                                    <li>
-                           <a href="{{ route('home') }}"><div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div> Profile<i class="fas fa-chevron-down"></i></a>
-                                                        <ul>
-                                                            <li><a href="">Wishlist</a></li>
-                                                            <li><a href="">Checkout</a></li>
-                                                            <li><a href="#">Others</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    
-                                                </ul> 
-                                         @endguest
-                            </div>
+                            @guest
+                            <div><a href="{{ route('login') }}"><div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div> Register/Login</a></div>
+                                     @else
+            
+                                <ul class="standard_dropdown top_bar_dropdown">
+                                                <li>
+                       <a href="{{ route('home') }}"><div class="user_icon"><img src="{{ asset('public/frontend/images/user.svg')}}" alt=""></div> Profile<i class="fas fa-chevron-down"></i></a>
+                                                    <ul>
+                                                        <li><a href="{{ route('user.wishlist') }}">Wishlist</a></li>
+                                                        <li><a href="{{ route('user.checkout') }}">Checkout</a></li>
+                                                        <li><a href="#">Others</a></li>
+                                                    </ul>
+                                                </li>
+                                                
+                                            </ul> 
+                                     @endguest
+             
                         </div>
                     </div>
                 </div>
@@ -129,16 +128,29 @@
                         </div>
                     </div>
 
-                    <!-- Wishlist -->
-                    <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
-                        <div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
-                            <div class="wishlist d-flex flex-row align-items-center justify-content-end">
-                                <div class="wishlist_icon"><img src="{{ asset('public/frontend/images/heart.png')}}" alt=""></div>
-                                <div class="wishlist_content">
-                                    <div class="wishlist_text"><a href="#">Wishlist</a></div>
-                                    <div class="wishlist_count">115</div>
-                                </div>
+                   <!-- Wishlist -->
+                   <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+                    <div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+                        <div class="wishlist d-flex flex-row align-items-center justify-content-end">
+                 @guest
+
+                 @else
+           
+
+           @php
+     $wishlist = DB::table('wishlists')->where('user_id',Auth::id())->get();
+           @endphp
+
+
+
+                            <div class="wishlist_icon"><img src="{{ asset('public/frontend/images/heart.png')}}" alt=""></div>
+                            <div class="wishlist_content">
+                                <div class="wishlist_text"><a href="#">Wishlist</a></div>
+                                <div class="wishlist_count">{{ count($wishlist) }}</div>
                             </div>
+                        </div>
+
+                        @endguest
 
                             <!-- Cart -->
                             <div class="cart">
