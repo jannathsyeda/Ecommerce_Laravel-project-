@@ -111,3 +111,6 @@ Route::get('add/to/cart/{id}', 'CartController@AddCart');
 Route::get('check', 'CartController@check');
 
 Route::get('/product/details/{id}/{product_name}', 'ProductController@ProductView');
+
+
+Route::post('/cart/product/add/{id}', 'ProductController@AddCart');
