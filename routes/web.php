@@ -114,3 +114,5 @@ Route::get('/product/details/{id}/{product_name}', 'ProductController@ProductVie
 
 
 Route::post('/cart/product/add/{id}', 'ProductController@AddCart');
+
+Route::get('product/cart', 'CartController@ShowCart')->name('show.cart');

@@ -156,12 +156,12 @@
                             <div class="cart">
                                 <div class="cart_container d-flex flex-row align-items-center justify-content-end">
                                     <div class="cart_icon">
-                                        <img src="images/cart.png" alt="">
-                                        <div class="cart_count"><span>10</span></div>
+                                        <img src="{{ asset('public/frontend/images/cart.png')}}" alt="">
+                                        <div class="cart_count"><span>{{ Cart::count() }}</span></div>
                                     </div>
                                     <div class="cart_content">
-                                        <div class="cart_text"><a href="#">Cart</a></div>
-                                        <div class="cart_price">$85</div>
+                                        <div class="cart_text"><a href="{{ route('show.cart') }}">Cart</a></div>
+                                        <div class="cart_price">${{ Cart::subtotal() }}</div>
                                     </div>
                                 </div>
                             </div>
