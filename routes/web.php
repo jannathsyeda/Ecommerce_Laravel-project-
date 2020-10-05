@@ -119,3 +119,8 @@ Route::get('product/cart', 'CartController@ShowCart')->name('show.cart');
 
 Route::get('remove/cart/{rowId}', 'CartController@removeCart');
 Route::post('update/cart/item/', 'CartController@UpdateCart')->name('update.cartitem');
+
+//modal ajax route
+Route::get('/cart/product/view/{id}', 'CartController@ViewProduct');
+Route::post('insert/into/cart/', 'CartController@insertCart')->name('insert.into.cart');
+
