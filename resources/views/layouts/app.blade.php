@@ -145,7 +145,7 @@
 
                             <div class="wishlist_icon"><img src="{{ asset('public/frontend/images/heart.png')}}" alt=""></div>
                             <div class="wishlist_content">
-                                <div class="wishlist_text"><a href="#">Wishlist</a></div>
+                                <div class="wishlist_text"><a href="">Wishlist</a></div>
                                 <div class="wishlist_count">{{ count($wishlist) }}</div>
                             </div>
                         </div>

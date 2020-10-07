@@ -79,7 +79,9 @@ class CartController extends Controller
     
         }
 
-        public function ViewProduct($id){
+// for popup model product show and added into cart use this two function(viewProduct & insertCart ) 
+        
+            public function ViewProduct($id){
             $product = DB::table('products')
                     ->join('categories','products.category_id','categories.id')
                     ->join('subcategories','products.subcategory_id','subcategories.id')
@@ -149,5 +151,38 @@ class CartController extends Controller
      } 
     
        } 
+//-----------------------------this two function  end for pup up model---------------
+
+           
+
+    public function Checkout(){
+      if (Auth::check()) {
+            
+        $cart = Cart::content();
+        return view('pages.checkout',compact('cart'));
+            
+        }else{
+                    $notification=array(
+                                    'messege'=>'At first Login Your Account',
+                                    'alert-type'=>'success'
+                                    );
+                                    return Redirect()->route('login')->with($notification);
+                } 
+            
+    }
+
+
+
+        public function wishlist(){
+        $userid = Auth::id();
+        $product = DB::table('wishlists')
+                ->join('products','wishlists.product_id','products.id')
+                ->select('products.*','wishlists.user_id')
+                ->where('wishlists.user_id',$userid)
+                ->get();
+               // return response()->json($product);
+                return view('pages.wishlist',compact('product'));
+      
+        }
 }
  
