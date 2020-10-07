@@ -128,3 +128,5 @@ Route::get('user/checkout/', 'CartController@Checkout')->name('user.checkout');
 Route::get('user/wishlist/', 'CartController@wishlist')->name('user.wishlist');
 
 
+Route::post('user/apply/coupon/', 'CartController@Coupon')->name('apply.coupon');
+Route::get('coupon/remove/', 'CartController@CouponRemove')->name('coupon.remove');

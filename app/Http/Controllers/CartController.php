@@ -184,5 +184,43 @@ class CartController extends Controller
                 return view('pages.wishlist',compact('product'));
       
         }
+
+        public function Coupon(Request $request){
+            $coupon = $request->coupon;
+     
+         $check = DB::table('coupons')->where('coupon',$coupon)->first();
+         if ($check) {
+         Session::put('coupon',[
+         'name' => $check->coupon,
+         'discount' => $check->discount,
+         'balance' => Cart::Subtotal()-$check->discount 
+         ]);
+             $notification=array(
+                             'messege'=>'Successfully Coupon Applied',
+                             'alert-type'=>'success'
+                              );
+                            return Redirect()->back()->with($notification);
+     
+     
+         }else{
+             $notification=array(
+                             'messege'=>'Invalid Coupon',
+                             'alert-type'=>'success'
+                              );
+                            return Redirect()->back()->with($notification);
+         }
+     
+        }
+     
+     
+      public function CouponRemove(){
+          Session::forget('coupon');
+          $notification=array(
+                             'messege'=>'Coupon remove Successfully',
+                             'alert-type'=>'success'
+                              );
+                            return Redirect()->back()->with($notification);
+     
+      }
 }
  
