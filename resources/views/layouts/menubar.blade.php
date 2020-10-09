@@ -93,7 +93,7 @@ $category = DB::table('categories')->get();
                                     <li><a href="contact.html">Contact<i class="fas fa-chevron-down"></i></a></li>
                                 </ul>
                             </li>
-                            <li><a href="blog.html">Blog<i class="fas fa-chevron-down"></i></a></li>
+                            <li><a href="{{ route('blog.post') }}">Blog<i class="fas fa-chevron-down"></i></a></li>
                             <li><a href="contact.html">Contact<i class="fas fa-chevron-down"></i></a></li>
                         </ul>
                     </div>
@@ -187,7 +187,7 @@ $category = DB::table('categories')->get();
                                 <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
                             </ul>
                         </li>
-                        <li class="page_menu_item"><a href="blog.html">blog<i class="fa fa-angle-down"></i></a></li>
+                        <li><a href="{{ route('blog.post') }}">Blog<i class="fas fa-chevron-down"></i></a></li>
                         <li class="page_menu_item"><a href="contact.html">contact<i class="fa fa-angle-down"></i></a></li>
                     </ul>
                     

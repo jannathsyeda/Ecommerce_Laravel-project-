@@ -130,3 +130,12 @@ Route::get('user/wishlist/', 'CartController@wishlist')->name('user.wishlist');
 
 Route::post('user/apply/coupon/', 'CartController@Coupon')->name('apply.coupon');
 Route::get('coupon/remove/', 'CartController@CouponRemove')->name('coupon.remove');
+
+/// Blog Post Route 
+
+Route::get('blog/post/', 'BlogController@blog')->name('blog.post');
+
+Route::get('language/english', 'BlogController@English')->name('language.english');
+Route::get('language/hindi', 'BlogController@Hindi')->name('language.hindi');
+
+Route::get('blog/single/{id}', 'BlogController@BlogSingle');
