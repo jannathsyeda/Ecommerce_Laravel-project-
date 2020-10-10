@@ -139,3 +139,7 @@ Route::get('language/english', 'BlogController@English')->name('language.english
 Route::get('language/hindi', 'BlogController@Hindi')->name('language.hindi');
 
 Route::get('blog/single/{id}', 'BlogController@BlogSingle');
+
+// Pyment Step 
+Route::get('payment/page', 'CartController@PaymentPage')->name('payment.step');
+Route::post('user/payment/process/', 'PaymentController@Payment')->name('payment.process');
