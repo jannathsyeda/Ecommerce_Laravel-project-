@@ -150,4 +150,4 @@ Route::post('user/payment/process/', 'PaymentController@Payment')->name('payment
 
 // Product details Page 
 Route::get('products/{id}', 'ProductController@ProductsView');
-// Route::get('allcategory/{id}', 'ProductController@CategoryView');
+Route::get('allcategory/{id}', 'ProductController@CategoryView');

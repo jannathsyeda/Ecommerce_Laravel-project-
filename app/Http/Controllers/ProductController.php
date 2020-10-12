@@ -87,5 +87,15 @@ class ProductController extends Controller
 		 
 		 
 			   }
+
+			   public function CategoryView($id){
+
+
+				$category_names = DB::table('categories')->where('id',$id)->get();
+
+				$category_all =  DB::table('products')->where('category_id',$id)->paginate(10);
+				return view('pages.all_category',compact('category_all','category_names'));
+			  
+			  }
 		 
 }
