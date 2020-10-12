@@ -68,4 +68,24 @@ class ProductController extends Controller
 			}   
 		
 			  }
+
+
+
+			  public function ProductsView($id){
+
+			
+				$products = DB::table('products')->where('subcategory_id',$id)->paginate(5);
+		 
+				$categorys = DB::table('categories')->get();
+				$subcategory = DB::table('products')->where('subcategory_id',$id)->select('subcategory_id')->get();
+
+				$brands = DB::table('products')->where('subcategory_id',$id)->select('brand_id')->groupBy('brand_id')->get();
+		 
+				$sub = DB::table('subcategories')->where('id',$id)->get();
+
+				return view('pages.all_products',compact('products','categorys','brands','sub'));
+		 
+		 
+			   }
+		 
 }
