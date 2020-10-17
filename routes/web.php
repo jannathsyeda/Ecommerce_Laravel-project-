@@ -117,9 +117,9 @@ Route::get('check', 'CartController@check');
 Route::get('/product/details/{id}/{product_name}', 'ProductController@ProductView');
 
 
-Route::post('/cart/product/add/{id}', 'ProductController@AddCart');
+Route::post('/cart/product/add/{id}','ProductController@AddCart');
 
-Route::get('product/cart', 'CartController@ShowCart')->name('show.cart');
+Route::get('product/cart','CartController@ShowCart')->name('show.cart');
 
 Route::get('remove/cart/{rowId}', 'CartController@removeCart');
 Route::post('update/cart/item/', 'CartController@UpdateCart')->name('update.cartitem');
@@ -127,7 +127,7 @@ Route::post('update/cart/item/', 'CartController@UpdateCart')->name('update.cart
 //modal ajax 
 Route::get('/cart/product/view/{id}', 'CartController@ViewProduct');
 Route::post('insert/into/cart/', 'CartController@insertCart')->name('insert.into.cart');
-
+//-----
 Route::get('user/checkout/', 'CartController@Checkout')->name('user.checkout');
 Route::get('user/wishlist/', 'CartController@wishlist')->name('user.wishlist');
 

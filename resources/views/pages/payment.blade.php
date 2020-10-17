@@ -1,4 +1,5 @@
 @extends('layouts.app')
+{{-- controller is cartController --}}
 
 @section('content')
 @include('layouts.menubar')

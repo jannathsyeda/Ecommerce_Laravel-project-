@@ -8,6 +8,8 @@ $setting = DB::table('settings')->first();
 $charge = $setting->shipping_charge; 
 $vat = $setting->vat; 
 $cart = Cart::Content();
+
+
 @endphp
 
 
@@ -188,12 +190,12 @@ $cart = Cart::Content();
        <input type="hidden" name="vat" value="{{ $vat }} ">
        <input type="hidden" name="total" value="{{ Cart::Subtotal() + $charge + $vat }} ">
 
-  {{-- <input type="hidden" name="ship_name" value="{{ $data['name'] }} ">
+  <input type="hidden" name="ship_name" value="{{ $data['name'] }} ">
   <input type="hidden" name="ship_phone" value="{{ $data['phone'] }} ">
   <input type="hidden" name="ship_email" value="{{ $data['email'] }} ">
   <input type="hidden" name="ship_address" value="{{ $data['address'] }} ">
   <input type="hidden" name="ship_city" value="{{ $data['city'] }} ">
-  <input type="hidden" name="payment_type" value="{{ $data['payment'] }} "> --}}
+  <input type="hidden" name="payment_type" value="{{ $data['payment'] }} "> 
 
 
 
