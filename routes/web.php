@@ -155,3 +155,7 @@ Route::post('user/stripe/charge/', 'PaymentController@StripeCharge')->name('stri
 Route::get('products/{id}', 'ProductController@ProductsView');
 Route::get('allcategory/{id}', 'ProductController@CategoryView');
 
+// Admin Order Route
+
+Route::get('admin/pading/order', 'Admin\OrderController@NewOrder')->name('admin.neworder');
+// Route::get('admin/view/order/{id}', 'Admin\OrderController@ViewOrder');
