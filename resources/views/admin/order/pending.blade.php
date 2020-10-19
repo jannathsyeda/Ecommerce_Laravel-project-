@@ -40,7 +40,7 @@
                   <td>{{ $row->total }} $</td>
                   <td>{{ $row->date }}  </td>
 
-                  {{-- <td>
+                  <td>
              @if($row->status == 0)
             <span class="badge badge-warning">Pending</span>
             @elseif($row->status == 1)
@@ -54,10 +54,10 @@
 
           @endif  
 
-               </td> --}}
+               </td>
 
                   <td>
-                    <a href=" " class="btn btn-sm btn-info">View</a>
+                    <a href="{{ URL::to('admin/view/order/'.$row->id) }} " class="btn btn-sm btn-info">View</a>
                     
                   </td>
                    
