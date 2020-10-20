@@ -130,11 +130,11 @@
           </div><!-- menu-item -->
         </a><!-- sl-menu-link -->
         <ul class="sl-menu-sub nav flex-column">
-          <li class="nav-item"><a href="{{ route('admin.neworder') }}" class="nav-link">New Order</a></li>
-          <li class="nav-item"><a href="" class="nav-link">Accept Payment </a></li>
-           <li class="nav-item"><a href="" class="nav-link">Cancel Order </a></li>
-          <li class="nav-item"><a href="" class="nav-link">Process Delivery </a></li>
-          <li class="nav-item"><a href="" class="nav-link">Delivery Success </a></li>
+          <li class="nav-item"><a href="{{ route('admin.neworder') }}" class="nav-link">New Order(pending_page)</a></li>
+          <li class="nav-item"><a href="{{ route('admin.accept.payment') }}" class="nav-link">Accept Payment </a></li>
+           <li class="nav-item"><a href="{{ route('admin.cancel.order') }}" class="nav-link">Cancel Order </a></li>
+          <li class="nav-item"><a href="{{ route('admin.process.payment') }}" class="nav-link">Process Delivery </a></li>
+          <li class="nav-item"><a href="{{ route('admin.success.payment') }}" class="nav-link">Delivery Success </a></li>
         </ul>
 
 

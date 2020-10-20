@@ -159,5 +159,16 @@ Route::get('allcategory/{id}', 'ProductController@CategoryView');
 
 Route::get('admin/pading/order', 'Admin\OrderController@NewOrder')->name('admin.neworder');
 Route::get('admin/view/order/{id}', 'Admin\OrderController@ViewOrder');
+
 Route::get('admin/payment/accept/{id}', 'Admin\OrderController@PaymentAccept');
 Route::get('admin/payment/cancel/{id}', 'Admin\OrderController@PaymentCancel');
+
+Route::get('admin/accept/payment', 'Admin\OrderController@AcceptPayment')->name('admin.accept.payment');
+
+Route::get('admin/cancel/order', 'Admin\OrderController@CancelOrder')->name('admin.cancel.order');
+
+Route::get('admin/process/payment', 'Admin\OrderController@ProcessPayment')->name('admin.process.payment');
+Route::get('admin/success/payment', 'Admin\OrderController@SuccessPayment')->name('admin.success.payment');
+
+Route::get('admin/delevery/process/{id}', 'Admin\OrderController@DeleveryProcess');
+Route::get('admin/delevery/done/{id}', 'Admin\OrderController@DeleveryDone');
