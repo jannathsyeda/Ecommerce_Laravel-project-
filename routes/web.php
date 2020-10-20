@@ -172,3 +172,7 @@ Route::get('admin/success/payment', 'Admin\OrderController@SuccessPayment')->nam
 
 Route::get('admin/delevery/process/{id}', 'Admin\OrderController@DeleveryProcess');
 Route::get('admin/delevery/done/{id}', 'Admin\OrderController@DeleveryDone');
+
+/// SEO Setting Route
+Route::get('admin/seo', 'Admin\OrderController@seo')->name('admin.seo');
+Route::post('admin/seo/update', 'Admin\OrderController@UpdateSeo')->name('update.seo');
