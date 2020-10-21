@@ -72,7 +72,7 @@ class PaymentController extends Controller
        $data['vat'] = $request->vat;
        $data['total'] = $request->total;
        $data['payment_type'] = $request->payment_type;
-    //    $data['status_code'] = mt_rand(100000,999999);
+     $data['status_code'] = mt_rand(100000,999999);
    
        if (Session::has('coupon')) {
            $data['subtotal'] = Session::get('coupon')['balance'];
