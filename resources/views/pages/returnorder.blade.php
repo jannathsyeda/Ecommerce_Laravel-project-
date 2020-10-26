@@ -13,11 +13,11 @@ $order = DB::table('orders')->where('user_id',Auth::id())->orderBy('id','DESC')-
           <thead>
             <tr>
               <th scope="col">Payment Type </th>
-              <th scope="col">Payment ID </th>
+              <th scope="col">Return </th>
               <th scope="col">Amount </th>
               <th scope="col">Date </th>
               <th scope="col">Status  </th>
-              <th scope="col">Status Code </th>
+              
               <th scope="col">Action </th>
 
             </tr>
@@ -26,7 +26,19 @@ $order = DB::table('orders')->where('user_id',Auth::id())->orderBy('id','DESC')-
             @foreach($order as $row)
             <tr>
               <td scope="col">{{ $row->payment_type }} </td>
-              <td scope="col">{{ $row->payment_id }} </td>
+
+              <td scope="col">
+
+              @if($row->return_order == 0)
+              <span class="badge badge-warning">No Request</span>
+              @elseif($row->return_order == 1)
+              <span class="badge badge-info">Pending</span>
+                @elseif($row->return_order == 2)
+                <span class="badge badge-warning">Success</span>
+                 
+              @endif   
+        </td>
+
               <td scope="col">{{ $row->total }}$  </td>
               <td scope="col">{{ $row->date }}  </td>
 
@@ -44,11 +56,18 @@ $order = DB::table('orders')->where('user_id',Auth::id())->orderBy('id','DESC')-
 
           @endif  
 
-                </td>
-
-              <td scope="col">{{ $row->status_code }}  </td>
+                </td> 
+              
               <td scope="col">
-             <a href="" class="btn btn-sm btn-info"> View</a>
+             @if($row->return_order == 0)
+  <a href="{{ url('request/return/'.$row->id) }}" class="btn btn-sm btn-danger" id="return"> Return</a>
+              @elseif($row->return_order == 1)
+              <span class="badge badge-info">Pending</span>
+                @elseif($row->return_order == 2)
+                <span class="badge badge-warning">Success</span>
+                 
+              @endif    
+              
                </td>
             </tr>
              @endforeach

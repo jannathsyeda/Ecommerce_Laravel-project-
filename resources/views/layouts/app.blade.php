@@ -402,7 +402,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
              var link = $(this).attr("href");
                 swal({
                   title: "Are you Want to Return?",
-                  text: "Once Teturn, this will return your money!",
+                  text: "Once return, this will return your money!",
                   icon: "warning",
                   buttons: true,
                   dangerMode: true,
