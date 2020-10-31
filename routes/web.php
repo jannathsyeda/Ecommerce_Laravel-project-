@@ -224,3 +224,15 @@ Route::get('admin/all/return/', 'Admin\ReturnController@AllReturn')->name('admin
 
 // Order Stock Route 
 Route::get('admin/product/stock', 'Admin\UserRoleController@ProductStock')->name('admin.product.stock');
+
+/// Contact page Routes
+
+Route::get('contact/page', 'ContactController@Contact')->name('contact.page');
+Route::post('contact/form', 'ContactController@ContactForm')->name('contact.form');
+
+// Route::get('admin/all/message', 'ContactController@AllMessage')->name('all.message');
+
+// // Search Route
+// Route::post('product/search', 'CartController@Search')->name('product.search');
+
+

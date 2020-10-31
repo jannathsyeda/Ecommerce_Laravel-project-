@@ -209,6 +209,7 @@
            <li class="nav-item"><a href="{{ route('admin.all.return') }}" class="nav-link">All Request </a></li>
            
         </ul>
+        
 
 @if(Auth::user()->stock == 1)
          <a href="#" class="sl-menu-link">
