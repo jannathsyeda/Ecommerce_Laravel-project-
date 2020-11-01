@@ -230,6 +230,23 @@ class CartController extends Controller
         $cart = Cart::Content();
         return view('pages.payment',compact('cart'));
       
+
        }
+
+
+       public function Search(Request $request){
+ 
+        $item = $request->search;
+      //  echo "$item";
+      
+        $products = DB::table('products')
+                  ->where('product_name','LIKE',"%$item%")
+                  ->paginate(20);
+      
+          return view('pages.search',compact('products'));        
+      
+      
+       }
+      
 }
  

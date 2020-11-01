@@ -233,6 +233,6 @@ Route::post('contact/form', 'ContactController@ContactForm')->name('contact.form
 Route::get('admin/all/message', 'ContactController@AllMessage')->name('all.message');
 
 // // Search Route
-// Route::post('product/search', 'CartController@Search')->name('product.search');
+Route::post('product/search', 'CartController@Search')->name('product.search');
 
 
