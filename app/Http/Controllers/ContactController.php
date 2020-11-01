@@ -8,7 +8,7 @@ class ContactController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
     }
 
 
@@ -31,6 +31,13 @@ class ContactController extends Controller
            );
          return Redirect()->back()->with($notification); 
 }
+
+
+public function AllMessage(){
+  $message =	DB::table('contact')->get();
+  return view('admin.contact.all_message',compact('message'));
+  }
+ 
 
 
 }
