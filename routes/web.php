@@ -1,5 +1,9 @@
 <?php
 
+//SOCIALITE ROUTE
+
+Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
+ Route::get('/callback/{provider}', 'SocialController@callback');
 
 
 Route::get('/', function () {return view('pages.index');});
