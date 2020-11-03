@@ -14,6 +14,7 @@ class PaymentController extends Controller
     public function Payment(Request $request)
     {
 
+
         $data = array();
         $data['name'] = $request->name;
         $data['phone'] = $request->phone;
@@ -85,8 +86,8 @@ class PaymentController extends Controller
        $data['year'] = date('Y');
        $order_id = DB::table('orders')->insertGetId($data);
    
-      // Mail send to user for Invoice
-    //  Mail::to($email)->send(new invoiceMail($data));
+     // Mail send to user for Invoice
+     Mail::to($email)->send(new invoiceMail($data));
    
    
        /// Insert Shipping Table 
