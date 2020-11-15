@@ -45,10 +45,10 @@ class CartController extends Controller
        
     //        }
 
-           public function check(){
-            $content = Cart::content();
-            return response()->json($content);
-        }
+        //    public function check(){
+        //     $content = Cart::content();
+        //     return response()->json($content);
+        // }
 
         public function ShowCart(){
             $cart = Cart::content();

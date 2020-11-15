@@ -1,5 +1,5 @@
 @php
-// $setting = DB::table('sitesetting')->first();
+ $setting = DB::table('sitesetting')->first();
 
  @endphp
 
@@ -46,8 +46,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col d-flex flex-row">
-                        {{-- <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{{ asset('public/frontend/images/phone.png')}}" alt=""></div>{{ $setting->phone_one }}</div>
-                        <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{{ asset('public/frontend/images/mail.png')}}" alt=""></div><a href="mailto:fastsales@gmail.com">{{ $setting->email }}</a></div> --}}
+                         <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{{ asset('public/frontend/images/phone.png')}}" alt=""></div>{{ $setting->phone_one }}</div>
+                        <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{{ asset('public/frontend/images/mail.png')}}" alt=""></div><a href="mailto:fastsales@gmail.com">{{ $setting->email }}</a></div> 
                         <div class="top_bar_content ml-auto">
                            
 

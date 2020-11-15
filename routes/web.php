@@ -115,14 +115,15 @@ Route::post('store/newslater', 'FrontController@StoreNewslater')->name('store.ne
 Route::get('add/wishlist/{id}', 'WishlistsController@addWishlist');
 
 // Add to Cart Route 
-Route::get('add/to/cart/{id}', 'CartController@AddCart');
-Route::get('check', 'CartController@check');
+// Route::get('add/to/cart/{id}', 'CartController@AddCart');
+// Route::get('check', 'CartController@check');
 
 Route::get('/product/details/{id}/{product_name}', 'ProductController@ProductView');
 
 
 Route::post('/cart/product/add/{id}','ProductController@AddCart');
 
+//for cart page
 Route::get('product/cart','CartController@ShowCart')->name('show.cart');
 
 Route::get('remove/cart/{rowId}', 'CartController@removeCart');
@@ -132,6 +133,8 @@ Route::post('update/cart/item/', 'CartController@UpdateCart')->name('update.cart
 Route::get('/cart/product/view/{id}', 'CartController@ViewProduct');
 Route::post('insert/into/cart/', 'CartController@insertCart')->name('insert.into.cart');
 //-----
+
+//checkout
 Route::get('user/checkout/', 'CartController@Checkout')->name('user.checkout');
 Route::get('user/wishlist/', 'CartController@wishlist')->name('user.wishlist');
 
