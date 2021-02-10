@@ -40,6 +40,6 @@ Features of this project-
 
 * Site  SEO
 
-*Product add to cart
+* Product add to cart
 
-*check out option
+* check out option
