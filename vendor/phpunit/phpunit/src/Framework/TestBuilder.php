@@ -9,20 +9,29 @@
  */
 namespace PHPUnit\Framework;
 
+use function assert;
+use function count;
+use function get_class;
+use function sprintf;
+use function trim;
+use PHPUnit\Util\Filter;
+use PHPUnit\Util\InvalidDataSetException;
 use PHPUnit\Util\Test as TestUtil;
+use ReflectionClass;
+use Throwable;
 
 /**
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestBuilder
 {
-    public function build(\ReflectionClass $theClass, string $methodName): Test
+    public function build(ReflectionClass $theClass, string $methodName): Test
     {
         $className = $theClass->getName();
 
         if (!$theClass->isInstantiable()) {
             return new WarningTestCase(
-                \sprintf('Cannot instantiate class "%s".', $className)
+                sprintf('Cannot instantiate class "%s".', $className)
             );
         }
 
@@ -55,7 +64,7 @@ final class TestBuilder
         $parameters = $constructor->getParameters();
 
         // TestCase() or TestCase($name)
-        if (\count($parameters) < 2) {
+        if (count($parameters) < 2) {
             $test = $this->buildTestWithoutData($className);
         } // TestCase($name, $data)
         else {
@@ -65,29 +74,32 @@ final class TestBuilder
                     $methodName
                 );
             } catch (IncompleteTestError $e) {
-                $message = \sprintf(
-                    'Test for %s::%s marked incomplete by data provider',
+                $message = sprintf(
+                    "Test for %s::%s marked incomplete by data provider\n%s",
                     $className,
-                    $methodName
+                    $methodName,
+                    $this->throwableToString($e)
                 );
-                $message = $this->appendExceptionMessageIfAvailable($e, $message);
-                $data    = new IncompleteTestCase($className, $methodName, $message);
+
+                $data = new IncompleteTestCase($className, $methodName, $message);
             } catch (SkippedTestError $e) {
-                $message = \sprintf(
-                    'Test for %s::%s skipped by data provider',
+                $message = sprintf(
+                    "Test for %s::%s skipped by data provider\n%s",
                     $className,
-                    $methodName
+                    $methodName,
+                    $this->throwableToString($e)
                 );
-                $message = $this->appendExceptionMessageIfAvailable($e, $message);
-                $data    = new SkippedTestCase($className, $methodName, $message);
-            } catch (\Throwable $t) {
-                $message = \sprintf(
-                    'The data provider specified for %s::%s is invalid.',
+
+                $data = new SkippedTestCase($className, $methodName, $message);
+            } catch (Throwable $t) {
+                $message = sprintf(
+                    "The data provider specified for %s::%s is invalid.\n%s",
                     $className,
-                    $methodName
+                    $methodName,
+                    $this->throwableToString($t)
                 );
-                $message = $this->appendExceptionMessageIfAvailable($t, $message);
-                $data    = new WarningTestCase($message);
+
+                $data = new WarningTestCase($message);
             }
 
             // Test method with @dataProvider.
@@ -120,22 +132,13 @@ final class TestBuilder
         return $test;
     }
 
-    private function appendExceptionMessageIfAvailable(\Throwable $e, string $message): string
-    {
-        $_message = $e->getMessage();
-
-        if (!empty($_message)) {
-            $message .= "\n" . $_message;
-        }
-
-        return $message;
-    }
-
+    /** @psalm-param class-string $className */
     private function buildTestWithoutData(string $className)
     {
         return new $className;
     }
 
+    /** @psalm-param class-string $className */
     private function buildDataProviderTestSuite(
         string $methodName,
         string $className,
@@ -159,7 +162,7 @@ final class TestBuilder
             foreach ($data as $_dataName => $_data) {
                 $_test = new $className($methodName, $_data, $_dataName);
 
-                \assert($_test instanceof TestCase);
+                assert($_test instanceof TestCase);
 
                 $this->configureTestCase(
                     $_test,
@@ -208,5 +211,29 @@ final class TestBuilder
                 $backupSettings['backupStaticAttributes']
             );
         }
+    }
+
+    private function throwableToString(Throwable $t): string
+    {
+        $message = $t->getMessage();
+
+        if (empty(trim($message))) {
+            $message = '<no message>';
+        }
+
+        if ($t instanceof InvalidDataSetException) {
+            return sprintf(
+                "%s\n%s",
+                $message,
+                Filter::getFilteredStacktrace($t)
+            );
+        }
+
+        return sprintf(
+            "%s: %s\n%s",
+            get_class($t),
+            $message,
+            Filter::getFilteredStacktrace($t)
+        );
     }
 }

@@ -22,9 +22,9 @@ use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
  */
 class MetadataBag implements SessionBagInterface
 {
-    const CREATED = 'c';
-    const UPDATED = 'u';
-    const LIFETIME = 'l';
+    public const CREATED = 'c';
+    public const UPDATED = 'u';
+    public const LIFETIME = 'l';
 
     /**
      * @var string
@@ -159,7 +159,7 @@ class MetadataBag implements SessionBagInterface
         $this->name = $name;
     }
 
-    private function stampCreated($lifetime = null)
+    private function stampCreated(int $lifetime = null): void
     {
         $timeStamp = time();
         $this->meta[self::CREATED] = $this->meta[self::UPDATED] = $this->lastUsed = $timeStamp;

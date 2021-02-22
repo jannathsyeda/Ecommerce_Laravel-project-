@@ -82,11 +82,25 @@ abstract class AbstractProvider implements ProviderContract
     protected $stateless = false;
 
     /**
+     * Indicates if PKCE should be used.
+     *
+     * @var bool
+     */
+    protected $usesPKCE = false;
+
+    /**
      * The custom Guzzle configuration options.
      *
      * @var array
      */
     protected $guzzle = [];
+
+    /**
+     * The cached user instance.
+     *
+     * @var \Laravel\Socialite\Two\User|null
+     */
+    protected $user;
 
     /**
      * Create a new provider instance.
@@ -151,6 +165,10 @@ abstract class AbstractProvider implements ProviderContract
             $this->request->session()->put('state', $state = $this->getState());
         }
 
+        if ($this->usesPKCE()) {
+            $this->request->session()->put('code_verifier', $codeVerifier = $this->getCodeVerifier());
+        }
+
         return new RedirectResponse($this->getAuthUrl($state));
     }
 
@@ -185,6 +203,11 @@ abstract class AbstractProvider implements ProviderContract
             $fields['state'] = $state;
         }
 
+        if ($this->usesPKCE()) {
+            $fields['code_challenge'] = $this->getCodeChallenge();
+            $fields['code_challenge_method'] = $this->getCodeChallengeMethod();
+        }
+
         return array_merge($fields, $this->parameters);
     }
 
@@ -205,17 +228,21 @@ abstract class AbstractProvider implements ProviderContract
      */
     public function user()
     {
+        if ($this->user) {
+            return $this->user;
+        }
+
         if ($this->hasInvalidState()) {
             throw new InvalidStateException;
         }
 
         $response = $this->getAccessTokenResponse($this->getCode());
 
-        $user = $this->mapUserToObject($this->getUserByToken(
+        $this->user = $this->mapUserToObject($this->getUserByToken(
             $token = Arr::get($response, 'access_token')
         ));
 
-        return $user->setToken($token)
+        return $this->user->setToken($token)
                     ->setRefreshToken(Arr::get($response, 'refresh_token'))
                     ->setExpiresIn(Arr::get($response, 'expires_in'));
     }
@@ -273,13 +300,19 @@ abstract class AbstractProvider implements ProviderContract
      */
     protected function getTokenFields($code)
     {
-        return [
+        $fields = [
             'grant_type' => 'authorization_code',
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'code' => $code,
             'redirect_uri' => $this->redirectUrl,
         ];
+
+        if ($this->usesPKCE()) {
+            $fields['code_verifier'] = $this->request->session()->pull('code_verifier');
+        }
+
+        return $fields;
     }
 
     /**
@@ -421,6 +454,48 @@ abstract class AbstractProvider implements ProviderContract
     protected function getState()
     {
         return Str::random(40);
+    }
+
+    /**
+     * Determine if the provider uses PKCE.
+     *
+     * @return bool
+     */
+    protected function usesPKCE()
+    {
+        return $this->usesPKCE;
+    }
+
+    /**
+     * Generates a random string of the right length for the PKCE code verifier.
+     *
+     * @return string
+     */
+    protected function getCodeVerifier()
+    {
+        return Str::random(96);
+    }
+
+    /**
+     * Generates the PKCE code challenge based on the PKCE code verifier in the session.
+     *
+     * @return string
+     */
+    protected function getCodeChallenge()
+    {
+        $hashed = hash('sha256', $this->request->session()->get('code_verifier'), true);
+
+        return rtrim(strtr(base64_encode($hashed), '+/', '-_'), '=');
+    }
+
+    /**
+     * Returns the hash method used to calculate the PKCE code challenge.
+     *
+     * @return string
+     */
+    protected function getCodeChallengeMethod()
+    {
+        return 'S256';
     }
 
     /**

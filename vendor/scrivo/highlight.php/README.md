@@ -1,23 +1,23 @@
 # highlight.php
 
-[![Build Status](https://travis-ci.org/scrivo/highlight.php.svg?branch=master)](https://travis-ci.org/scrivo/highlight.php)
+[![Unit Tests](https://github.com/scrivo/highlight.php/workflows/Unit%20Tests/badge.svg?branch=9.18)](https://github.com/scrivo/highlight.php/actions?query=workflow%3A%22Unit+Tests%22+branch%3A9.18)
 [![Latest Packagist release](https://img.shields.io/packagist/v/scrivo/highlight.php.svg)](https://packagist.org/packages/scrivo/highlight.php)
 [![Monthly downloads on Packagist](https://img.shields.io/packagist/dm/scrivo/highlight.php.svg)](https://packagist.org/packages/scrivo/highlight.php/stats)
 
-*highlight.php* is a server side code highlighter written in PHP that currently supports 185 languages. It's a port of [highlight.js](http://www.highlightjs.org) by Ivan Sagalaev that makes full use of the language and style definitions of the original JavaScript project.
+*highlight.php* is a server-side syntax highlighter written in PHP that currently supports 185 languages. It's a port of [highlight.js](http://www.highlightjs.org) by Ivan Sagalaev that makes full use of the language and style definitions of the original JavaScript project.
 
 [TOC]: # "## Table of Contents"
 
 ## Table of Contents
 - [Installation + Setup](#installation--setup)
-    - [Composer Version Constraints](#composer-version-constraints)
+  - [Composer Version Constraints](#composer-version-constraints)
 - [Usage](#usage)
-    - [Explicit Mode](#explicit-mode)
-    - [Automatic Language Detection Mode](#automatic-language-detection-mode)
-    - [Stylesheets](#stylesheets)
+  - [Explicit Mode](#explicit-mode)
+  - [Automatic Language Detection Mode](#automatic-language-detection-mode)
+  - [Stylesheets](#stylesheets)
 - [Highlighter Utilities](#highlighter-utilities)
 - [Versioning](#versioning)
-    - [Backward Compatibility Promise](#backward-compatibility-promise)
+  - [Backward Compatibility Promise](#backward-compatibility-promise)
 - [Some History](#some-history)
 - [License](#license)
 
@@ -40,7 +40,7 @@ It's come to our attention that a lot of tutorials and projects out there are lo
 
 ## Usage
 
-The `\Highlight\Highlighter` class contains the highlighting functionality. You can choose between two highlighting modes:
+The `\Highlight\Highlighter` class contains the syntax highlighting functionality. You can choose between two highlighting modes:
 
 1. explicit mode
 2. automatic language detection mode
@@ -66,18 +66,16 @@ catch (DomainException $e) {
     // This is thrown if the specified language does not exist
 
     echo "<pre><code>";
-    echo $code;
+    echo htmlentities($code);
     echo "</code></pre>";
 }
 ```
 
 ### Automatic Language Detection Mode
 
-Alternatively you can use the automatic detection mode, which highlights your code with the language the library thinks is best.
+Alternatively you can use the automatic detection mode, which highlights your code with the language the library thinks is best. It is highly recommended you explicitly choose the language or limit the number of languages to automatically detect to reduce the number of inaccuracies.
 
-> **Warning:** You must supply a list of languages that the `Highlighter` will pick from. This occurs in a brute force fashion and the language with the most accurate result will be selected. This is extremely inefficient as you supply more languages and may not always be 100% accurate.
->
-> It is highly recommended you explicitly choose the language or limit the number of languages to automatically detect to reduce the number of inaccuracies.
+> **Warning:** Auto-detection occurs in a brute force fashion and the language with the most accurate result will be selected. This is extremely inefficient as you supply more languages and may not always be 100% accurate if similar languages are configured.
 
 ```php
 $hl = new \Highlight\Highlighter();
@@ -90,6 +88,19 @@ echo $highlighted->value;
 echo "</code></pre>";
 ```
 
+#### Default Languages
+
+In version 9.x of this project, the following languages are the default auto-detected languages:
+
+- XML
+- JSON
+- JavaScript
+- CSS
+- PHP
+- HTTP
+
+These default languages are considered "legacy behavior" and will be removed in version 10.x of this library to match highlight.js behavior; the new default behavior in 10.x will be to use *every* language.
+
 ### Stylesheets
 
 The same stylesheets available in the **highlight.js** project are available in the `styles` directory of this project and may be included in your own CSS or made accessible to your web server.
@@ -100,11 +111,14 @@ The core of the project is loyal port of **highlight.js** and is available under
 
 Available functions:
 
-- [`getAvailableStyleSheets(bool $filePaths = false)`](HighlightUtilities/functions.php#L32-L45)
-- [`getStyleSheet(string $name)`](HighlightUtilities/functions.php#L72-L85)
-- [`getStyleSheetFolder()`](HighlightUtilities/functions.php#L93-L101)
-- [`getStyleSheetPath(string $name)`](HighlightUtilities/functions.php#L109-L121)
-- [`splitCodeIntoArray(string $html)`](HighlightUtilities/functions.php#L137-L150)
+- [`getAvailableStyleSheets(bool $filePaths = false): string[]`](HighlightUtilities/functions.php#L35-L48)
+- [`getLanguagesFolder(): string`](HighlightUtilities/functions.php#L156-L164)
+- [`getLanguageDefinitionPath(string $name): string`](HighlightUtilities/functions.php#L170-L182)
+- [`getStyleSheet(string $name): false|string`](HighlightUtilities/functions.php#L94-L107)
+- [`getStyleSheetFolder(): string`](HighlightUtilities/functions.php#L115-L123)
+- [`getStyleSheetPath(string $name): string`](HighlightUtilities/functions.php#L131-L143)
+- [`getThemeBackgroundColor(string $name): float[]`](HighlightUtilities/functions.php#L75-L88)
+- [`splitCodeIntoArray(string $html): false|string[]`](HighlightUtilities/functions.php#L194-L205)
 
 ## Versioning
 

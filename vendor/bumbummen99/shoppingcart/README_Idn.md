@@ -1,5 +1,5 @@
 ## LaravelShoppingcart
-[![Build Status](https://travis-ci.org/bumbummen99/LaravelShoppingcart.png?branch=master)](https://travis-ci.org/bumbummen99/LaravelShoppingcart)
+![CI Code Checks](https://github.com/bumbummen99/LaravelShoppingcart/workflows/CI%20Code%20Checks/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/bumbummen99/LaravelShoppingcart/branch/master/graph/badge.svg)](https://codecov.io/gh/bumbummen99/LaravelShoppingcart)
 [![StyleCI](https://styleci.io/repos/152610878/shield?branch=master)](https://styleci.io/repos/152610878)
 [![Total Downloads](https://poser.pugx.org/bumbummen99/shoppingcart/downloads.png)](https://packagist.org/packages/bumbummen99/shoppingcart)
@@ -544,7 +544,7 @@ Jika Anda ingin mengambil keranjang dari database dan mengembalikannya, yang har
 Jika Anda ingin menggabungkan keranjang dengan keranjang lain dari basis data, yang harus Anda lakukan adalah memanggil `gabungan ($ identifier)` di mana `$ identifier` adalah kunci yang Anda tentukan untuk metode` store`. Anda juga dapat menentukan apakah Anda ingin mempertahankan potongan harga dan tarif pajak item.
      
     // Merge the contents of 'savedcart' into 'username'.
-    Cart::instance('username')->merge('savedcart', $keepDiscount, $keepTaxrate);
+    Cart::instance('username')->merge('savedcart', $keepDiscount, $keepTaxrate, 'savedcartinstance');
 
 ## Pengecualian
 

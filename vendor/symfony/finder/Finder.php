@@ -38,9 +38,9 @@ use Symfony\Component\Finder\Iterator\SortableIterator;
  */
 class Finder implements \IteratorAggregate, \Countable
 {
-    const IGNORE_VCS_FILES = 1;
-    const IGNORE_DOT_FILES = 2;
-    const IGNORE_VCS_IGNORED_FILES = 4;
+    public const IGNORE_VCS_FILES = 1;
+    public const IGNORE_DOT_FILES = 2;
+    public const IGNORE_VCS_IGNORED_FILES = 4;
 
     private $mode = 0;
     private $names = [];
@@ -440,8 +440,8 @@ class Finder implements \IteratorAggregate, \Countable
      */
     public function sortByName(/* bool $useNaturalSort = false */)
     {
-        if (\func_num_args() < 1 && __CLASS__ !== \get_class($this) && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface) {
-            @trigger_error(sprintf('The "%s()" method will have a new "bool $useNaturalSort = false" argument in version 5.0, not defining it is deprecated since Symfony 4.2.', __METHOD__), E_USER_DEPRECATED);
+        if (\func_num_args() < 1 && __CLASS__ !== static::class && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface && !$this instanceof \Mockery\MockInterface) {
+            @trigger_error(sprintf('The "%s()" method will have a new "bool $useNaturalSort = false" argument in version 5.0, not defining it is deprecated since Symfony 4.2.', __METHOD__), \E_USER_DEPRECATED);
         }
         $useNaturalSort = 0 < \func_num_args() && func_get_arg(0);
 
@@ -595,7 +595,8 @@ class Finder implements \IteratorAggregate, \Countable
         foreach ((array) $dirs as $dir) {
             if (is_dir($dir)) {
                 $resolvedDirs[] = $this->normalizeDir($dir);
-            } elseif ($glob = glob($dir, (\defined('GLOB_BRACE') ? GLOB_BRACE : 0) | GLOB_ONLYDIR)) {
+            } elseif ($glob = glob($dir, (\defined('GLOB_BRACE') ? \GLOB_BRACE : 0) | \GLOB_ONLYDIR | \GLOB_NOSORT)) {
+                sort($glob);
                 $resolvedDirs = array_merge($resolvedDirs, array_map([$this, 'normalizeDir'], $glob));
             } else {
                 throw new DirectoryNotFoundException(sprintf('The "%s" directory does not exist.', $dir));
@@ -623,7 +624,13 @@ class Finder implements \IteratorAggregate, \Countable
         }
 
         if (1 === \count($this->dirs) && 0 === \count($this->iterators)) {
-            return $this->searchInDirectory($this->dirs[0]);
+            $iterator = $this->searchInDirectory($this->dirs[0]);
+
+            if ($this->sort || $this->reverseSorting) {
+                $iterator = (new Iterator\SortableIterator($iterator, $this->sort, $this->reverseSorting))->getIterator();
+            }
+
+            return $iterator;
         }
 
         $iterator = new \AppendIterator();
@@ -633,6 +640,10 @@ class Finder implements \IteratorAggregate, \Countable
 
         foreach ($this->iterators as $it) {
             $iterator->append($it);
+        }
+
+        if ($this->sort || $this->reverseSorting) {
+            $iterator = (new Iterator\SortableIterator($iterator, $this->sort, $this->reverseSorting))->getIterator();
         }
 
         return $iterator;
@@ -669,7 +680,7 @@ class Finder implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Check if the any results were found.
+     * Check if any results were found.
      *
      * @return bool
      */
@@ -714,7 +725,7 @@ class Finder implements \IteratorAggregate, \Countable
         }
 
         $minDepth = 0;
-        $maxDepth = PHP_INT_MAX;
+        $maxDepth = \PHP_INT_MAX;
 
         foreach ($this->depths as $comparator) {
             switch ($comparator->getOperator()) {
@@ -749,7 +760,7 @@ class Finder implements \IteratorAggregate, \Countable
 
         $iterator = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::SELF_FIRST);
 
-        if ($minDepth > 0 || $maxDepth < PHP_INT_MAX) {
+        if ($minDepth > 0 || $maxDepth < \PHP_INT_MAX) {
             $iterator = new Iterator\DepthRangeFilterIterator($iterator, $minDepth, $maxDepth);
         }
 
@@ -781,28 +792,23 @@ class Finder implements \IteratorAggregate, \Countable
             $iterator = new Iterator\PathFilterIterator($iterator, $this->paths, $notPaths);
         }
 
-        if ($this->sort || $this->reverseSorting) {
-            $iteratorAggregate = new Iterator\SortableIterator($iterator, $this->sort, $this->reverseSorting);
-            $iterator = $iteratorAggregate->getIterator();
-        }
-
         return $iterator;
     }
 
     /**
      * Normalizes given directory names by removing trailing slashes.
      *
-     * Excluding: (s)ftp:// wrapper
-     *
-     * @param string $dir
-     *
-     * @return string
+     * Excluding: (s)ftp:// or ssh2.(s)ftp:// wrapper
      */
-    private function normalizeDir($dir)
+    private function normalizeDir(string $dir): string
     {
+        if ('/' === $dir) {
+            return $dir;
+        }
+
         $dir = rtrim($dir, '/'.\DIRECTORY_SEPARATOR);
 
-        if (preg_match('#^s?ftp://#', $dir)) {
+        if (preg_match('#^(ssh2\.)?s?ftp://#', $dir)) {
             $dir .= '/';
         }
 

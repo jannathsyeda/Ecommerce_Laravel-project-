@@ -9,6 +9,25 @@
  */
 namespace PHPUnit\Util;
 
+use const ENT_SUBSTITUTE;
+use const PHP_SAPI;
+use function assert;
+use function count;
+use function dirname;
+use function explode;
+use function fclose;
+use function fflush;
+use function flush;
+use function fopen;
+use function fsockopen;
+use function fwrite;
+use function htmlspecialchars;
+use function is_resource;
+use function is_string;
+use function sprintf;
+use function str_replace;
+use function strncmp;
+use function strpos;
 use PHPUnit\Framework\Exception;
 
 /**
@@ -24,7 +43,7 @@ class Printer
     protected $autoFlush = false;
 
     /**
-     * @var resource
+     * @psalm-var resource|closed-resource
      */
     protected $out;
 
@@ -42,38 +61,44 @@ class Printer
      */
     public function __construct($out = null)
     {
-        if ($out !== null) {
-            if (\is_string($out)) {
-                if (\strpos($out, 'socket://') === 0) {
-                    $out = \explode(':', \str_replace('socket://', '', $out));
-
-                    if (\count($out) !== 2) {
-                        throw new Exception;
-                    }
-
-                    $this->out = \fsockopen($out[0], $out[1]);
-                } else {
-                    if (\strpos($out, 'php://') === false && !Filesystem::createDirectory(\dirname($out))) {
-                        throw new Exception(\sprintf('Directory "%s" was not created', \dirname($out)));
-                    }
-
-                    $this->out = \fopen($out, 'wt');
-                }
-
-                $this->outTarget = $out;
-            } else {
-                $this->out = $out;
-            }
+        if ($out === null) {
+            return;
         }
+
+        if (is_string($out) === false) {
+            $this->out = $out;
+
+            return;
+        }
+
+        if (strpos($out, 'socket://') === 0) {
+            $out = explode(':', str_replace('socket://', '', $out));
+
+            if (count($out) !== 2) {
+                throw new Exception;
+            }
+
+            $this->out = fsockopen($out[0], $out[1]);
+        } else {
+            if (strpos($out, 'php://') === false && !Filesystem::createDirectory(dirname($out))) {
+                throw new Exception(sprintf('Directory "%s" was not created', dirname($out)));
+            }
+
+            $this->out = fopen($out, 'wt');
+        }
+
+        $this->outTarget = $out;
     }
 
     /**
-     * Flush buffer and close output if it's not to a PHP stream
+     * Flush buffer and close output if it's not to a PHP stream.
      */
     public function flush(): void
     {
-        if ($this->out && \strncmp($this->outTarget, 'php://', 6) !== 0) {
-            \fclose($this->out);
+        if ($this->out && strncmp($this->outTarget, 'php://', 6) !== 0) {
+            assert(is_resource($this->out));
+
+            fclose($this->out);
         }
     }
 
@@ -87,23 +112,27 @@ class Printer
     public function incrementalFlush(): void
     {
         if ($this->out) {
-            \fflush($this->out);
+            assert(is_resource($this->out));
+
+            fflush($this->out);
         } else {
-            \flush();
+            flush();
         }
     }
 
     public function write(string $buffer): void
     {
         if ($this->out) {
-            \fwrite($this->out, $buffer);
+            assert(is_resource($this->out));
+
+            fwrite($this->out, $buffer);
 
             if ($this->autoFlush) {
                 $this->incrementalFlush();
             }
         } else {
-            if (\PHP_SAPI !== 'cli' && \PHP_SAPI !== 'phpdbg') {
-                $buffer = \htmlspecialchars($buffer, \ENT_SUBSTITUTE);
+            if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+                $buffer = htmlspecialchars($buffer, ENT_SUBSTITUTE);
             }
 
             print $buffer;

@@ -23,8 +23,8 @@ import {
 
 export const onRE = /^@|^v-on:/
 export const dirRE = process.env.VBIND_PROP_SHORTHAND
-  ? /^v-|^@|^:|^\./
-  : /^v-|^@|^:/
+  ? /^v-|^@|^:|^\.|^#/
+  : /^v-|^@|^:|^#/
 export const forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/
 export const forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/
 const stripParensRE = /^\(|\)$/g
@@ -380,7 +380,7 @@ export function parse (
       }
     },
     comment (text: string, start, end) {
-      // adding anyting as a sibling to the root node is forbidden
+      // adding anything as a sibling to the root node is forbidden
       // comments should still be allowed, but ignored
       if (currentParent) {
         const child: ASTText = {
@@ -654,7 +654,7 @@ function processSlotContent (el) {
           if (el.parent && !maybeComponent(el.parent)) {
             warn(
               `<template v-slot> can only appear at the root level inside ` +
-              `the receiving the component`,
+              `the receiving component`,
               el
             )
           }

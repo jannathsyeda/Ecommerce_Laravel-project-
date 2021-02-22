@@ -2,8 +2,8 @@
 
 namespace Laravel\Ui;
 
-use InvalidArgumentException;
 use Illuminate\Console\Command;
+use InvalidArgumentException;
 
 class AuthCommand extends Command
 {
@@ -31,6 +31,7 @@ class AuthCommand extends Command
      */
     protected $views = [
         'auth/login.stub' => 'auth/login.blade.php',
+        'auth/passwords/confirm.stub' => 'auth/passwords/confirm.blade.php',
         'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
         'auth/register.stub' => 'auth/register.blade.php',
@@ -43,13 +44,15 @@ class AuthCommand extends Command
      * Execute the console command.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException
      */
     public function handle()
     {
         if (static::hasMacro($this->argument('type'))) {
             return call_user_func(static::$macros[$this->argument('type')], $this);
         }
-        
+
         if (! in_array($this->argument('type'), ['bootstrap'])) {
             throw new InvalidArgumentException('Invalid preset.');
         }

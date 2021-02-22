@@ -29,12 +29,9 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
     private $factory;
     private $tmpDir;
 
-    /**
-     * @return HttpMessageFactoryInterface
-     */
-    abstract protected function buildHttpMessageFactory();
+    abstract protected function buildHttpMessageFactory(): HttpMessageFactoryInterface;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->factory = $this->buildHttpMessageFactory();
         $this->tmpDir = sys_get_temp_dir();
@@ -135,12 +132,7 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $path = tempnam($this->tmpDir, uniqid());
         file_put_contents($path, $content);
 
-        if (class_exists('Symfony\Component\HttpFoundation\HeaderUtils')) {
-            // Symfony 4.1+
-            return new UploadedFile($path, $originalName, $mimeType, $error, true);
-        }
-
-        return new UploadedFile($path, $originalName, $mimeType, filesize($path), $error, true);
+        return new UploadedFile($path, $originalName, $mimeType, $error, true);
     }
 
     public function testCreateResponse()
@@ -158,7 +150,7 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
         $this->assertEquals(['3.4'], $psrResponse->getHeader('X-Symfony'));
 
         $cookieHeader = $psrResponse->getHeader('Set-Cookie');
-        $this->assertInternalType('array', $cookieHeader);
+        $this->assertIsArray($cookieHeader);
         $this->assertCount(1, $cookieHeader);
         $this->assertRegExp('{city=Lille; expires=Wed, 13-Jan-2021 22:23:01 GMT;( max-age=\d+;)? path=/; httponly}i', $cookieHeader[0]);
     }
@@ -192,12 +184,8 @@ abstract class AbstractHttpMessageFactoryTest extends TestCase
 
     public function testUploadErrNoFile()
     {
-        if (class_exists('Symfony\Component\HttpFoundation\HeaderUtils')) {
-            // Symfony 4.1+
-            $file = new UploadedFile('', '', null, UPLOAD_ERR_NO_FILE, true);
-        } else {
-            $file = new UploadedFile('', '', null, 0, UPLOAD_ERR_NO_FILE, true);
-        }
+        $file = new UploadedFile('', '', null, UPLOAD_ERR_NO_FILE, true);
+
         $this->assertEquals(0, $file->getSize());
         $this->assertEquals(UPLOAD_ERR_NO_FILE, $file->getError());
         $this->assertFalse($file->getSize(), 'SplFile::getSize() returns false on error');

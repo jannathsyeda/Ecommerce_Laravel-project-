@@ -151,11 +151,13 @@ Route::get('language/hindi', 'BlogController@Hindi')->name('language.hindi');
 
 Route::get('blog/single/{id}', 'BlogController@BlogSingle');
 
-// Pyment Step 
+// Payment Step 
 Route::get('payment/page', 'CartController@PaymentPage')->name('payment.step');
 Route::post('user/payment/process/', 'PaymentController@Payment')->name('payment.process');
 
 Route::post('user/stripe/charge/', 'PaymentController@StripeCharge')->name('stripe.charge');
+
+Route::post('user/oncash/charge/', 'PaymentController@OnCash')->name('oncash.charge');
 
 
 // Product details Page 

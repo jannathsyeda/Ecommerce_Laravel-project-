@@ -2,8 +2,8 @@
 
 namespace Facade\Ignition\QueryRecorder;
 
-use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Events\QueryExecuted;
 
 class QueryRecorder
 {
@@ -29,7 +29,7 @@ class QueryRecorder
     {
         $maximumQueries = $this->app['config']->get('flare.reporting.maximum_number_of_collected_queries', 200);
 
-        $reportBindings = $this->app['config']->get('flare.reporting.report_query_bindings');
+        $reportBindings = $this->app['config']->get('flare.reporting.report_query_bindings', true);
 
         $this->queries[] = Query::fromQueryExecutedEvent($queryExecuted, $reportBindings);
 

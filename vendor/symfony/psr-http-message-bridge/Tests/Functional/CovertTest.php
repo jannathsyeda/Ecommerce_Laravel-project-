@@ -36,7 +36,7 @@ class CovertTest extends TestCase
 {
     private $tmpDir;
 
-    public function setup()
+    public function setUp(): void
     {
         if (!class_exists('Nyholm\Psr7\ServerRequest')) {
             $this->markTestSkipped('nyholm/psr7 is not installed.');
@@ -229,11 +229,6 @@ class CovertTest extends TestCase
         $path = tempnam($this->tmpDir, uniqid());
         file_put_contents($path, $content);
 
-        if (class_exists('Symfony\Component\HttpFoundation\HeaderUtils')) {
-            // Symfony 4.1+
-            return new UploadedFile($path, $originalName, $mimeType, $error, true);
-        }
-
-        return new UploadedFile($path, $originalName, $mimeType, filesize($path), $error, true);
+        return new UploadedFile($path, $originalName, $mimeType, $error, true);
     }
 }

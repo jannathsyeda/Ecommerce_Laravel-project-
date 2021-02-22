@@ -94,7 +94,7 @@ class Collection implements ArrayAccess, Enumerable
     /**
      * Get the median of a given key.
      *
-     * @param  string|array|null $key
+     * @param  string|array|null  $key
      * @return mixed
      */
     public function median($key = null)
@@ -428,7 +428,7 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function groupBy($groupBy, $preserveKeys = false)
     {
-        if (is_array($groupBy)) {
+        if (! $this->useAsCallable($groupBy) && is_array($groupBy)) {
             $nextGroups = $groupBy;
 
             $groupBy = array_shift($nextGroups);
@@ -1128,7 +1128,7 @@ class Collection implements ArrayAccess, Enumerable
     /**
      * Sort the collection keys in descending order.
      *
-     * @param  int $options
+     * @param  int  $options
      * @return static
      */
     public function sortKeysDesc($options = SORT_REGULAR)
@@ -1210,7 +1210,7 @@ class Collection implements ArrayAccess, Enumerable
             return new static(func_get_args());
         }, $this->items], $arrayableItems);
 
-        return new static(call_user_func_array('array_map', $params));
+        return new static(array_map(...$params));
     }
 
     /**

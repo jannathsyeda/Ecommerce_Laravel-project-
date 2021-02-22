@@ -2,10 +2,12 @@
 
 namespace Facade\FlareClient\Context;
 
-use Throwable;
-use Symfony\Component\HttpFoundation\Request;
+use BadMethodCallException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Throwable;
 
 class RequestContext implements ContextInterface
 {
@@ -47,17 +49,33 @@ class RequestContext implements ContextInterface
                 return;
             }
 
+            try {
+                $fileSize = $file->getSize();
+            } catch (\RuntimeException $e) {
+                $fileSize = 0;
+            }
+
+            try {
+                $mimeType = $file->getMimeType();
+            } catch (InvalidArgumentException $e) {
+                $mimeType = 'undefined';
+            }
+
             return [
                 'pathname' => $file->getPathname(),
-                'size' => $file->getSize(),
-                'mimeType' => $file->getMimeType(),
+                'size' => $fileSize,
+                'mimeType' => $mimeType,
             ];
         }, $files);
     }
 
     public function getSession(): array
     {
-        $session = $this->request->getSession();
+        try {
+            $session = $this->request->getSession();
+        } catch (BadMethodCallException $exception) {
+            $session = [];
+        }
 
         return $session ? $this->getValidSessionData($session) : [];
     }

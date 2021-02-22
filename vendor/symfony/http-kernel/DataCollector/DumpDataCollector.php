@@ -14,6 +14,7 @@ namespace Symfony\Component\HttpKernel\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
@@ -43,6 +44,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
     private $sourceContextProvider;
 
     /**
+     * @param string|FileLinkFormatter|null       $fileLinkFormat
      * @param DataDumperInterface|Connection|null $dumper
      */
     public function __construct(Stopwatch $stopwatch = null, $fileLinkFormat = null, string $charset = null, RequestStack $requestStack = null, $dumper = null)
@@ -75,7 +77,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
             $this->stopwatch->start('dump');
         }
 
-        list('name' => $name, 'file' => $file, 'line' => $line, 'file_excerpt' => $fileExcerpt) = $this->sourceContextProvider->getContext();
+        ['name' => $name, 'file' => $file, 'line' => $line, 'file_excerpt' => $fileExcerpt] = $this->sourceContextProvider->getContext();
 
         if ($this->dumper instanceof Connection) {
             if (!$this->dumper->write($data)) {
@@ -98,7 +100,12 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         }
     }
 
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Throwable|null $exception
+     */
+    public function collect(Request $request, Response $response/*, \Throwable $exception = null*/)
     {
         if (!$this->dataCount) {
             $this->data = [];
@@ -148,7 +155,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
     /**
      * @internal
      */
-    public function __sleep()
+    public function __sleep(): array
     {
         if (!$this->dataCount) {
             $this->data = [];
@@ -177,7 +184,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         $fileLinkFormat = array_pop($this->data);
         $this->dataCount = \count($this->data);
 
-        self::__construct($this->stopwatch, $fileLinkFormat, $charset);
+        self::__construct($this->stopwatch, \is_string($fileLinkFormat) || $fileLinkFormat instanceof FileLinkFormatter ? $fileLinkFormat : null, \is_string($charset) ? $charset : null);
     }
 
     public function getDumpsCount()
@@ -187,13 +194,13 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
 
     public function getDumps($format, $maxDepthLimit = -1, $maxItemsPerDepth = -1)
     {
-        $data = fopen('php://memory', 'r+b');
+        $data = fopen('php://memory', 'r+');
 
         if ('html' === $format) {
             $dumper = new HtmlDumper($data, $this->charset);
             $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
         } else {
-            throw new \InvalidArgumentException(sprintf('Invalid dump format: %s', $format));
+            throw new \InvalidArgumentException(sprintf('Invalid dump format: "%s".', $format));
         }
         $dumps = [];
 
@@ -230,13 +237,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
                 --$i;
             }
 
-            if (isset($_SERVER['VAR_DUMPER_FORMAT'])) {
-                $html = 'html' === $_SERVER['VAR_DUMPER_FORMAT'];
-            } else {
-                $html = !\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && stripos($h[$i], 'html');
-            }
-
-            if ($html) {
+            if (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && stripos($h[$i], 'html')) {
                 $dumper = new HtmlDumper('php://output', $this->charset);
                 $dumper->setDisplayOptions(['fileLinkFormat' => $this->fileLinkFormat]);
             } else {
@@ -256,7 +257,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         }
     }
 
-    private function doDump(DataDumperInterface $dumper, $data, $name, $file, $line)
+    private function doDump(DataDumperInterface $dumper, $data, string $name, string $file, int $line)
     {
         if ($dumper instanceof CliDumper) {
             $contextDumper = function ($name, $file, $line, $fmt) {

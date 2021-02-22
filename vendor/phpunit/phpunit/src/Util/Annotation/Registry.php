@@ -9,7 +9,11 @@
  */
 namespace PHPUnit\Util\Annotation;
 
+use function array_key_exists;
 use PHPUnit\Util\Exception;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 
 /**
  * Reflection information, and therefore DocBlock information, is static within
@@ -43,43 +47,47 @@ final class Registry
      */
     public function forClassName(string $class): DocBlock
     {
-        if (\array_key_exists($class, $this->classDocBlocks)) {
+        if (array_key_exists($class, $this->classDocBlocks)) {
             return $this->classDocBlocks[$class];
         }
 
         try {
-            $reflection = new \ReflectionClass($class);
-        } catch (\ReflectionException $e) {
+            $reflection = new ReflectionClass($class);
+            // @codeCoverageIgnoreStart
+        } catch (ReflectionException $e) {
             throw new Exception(
                 $e->getMessage(),
                 (int) $e->getCode(),
                 $e
             );
         }
+        // @codeCoverageIgnoreEnd
 
         return $this->classDocBlocks[$class] = DocBlock::ofClass($reflection);
     }
 
     /**
      * @throws Exception
-     * @psalm-param class-string $className
+     * @psalm-param class-string $classInHierarchy
      */
-    public function forMethod(string $class, string $method): DocBlock
+    public function forMethod(string $classInHierarchy, string $method): DocBlock
     {
-        if (isset($this->methodDocBlocks[$class][$method])) {
-            return $this->methodDocBlocks[$class][$method];
+        if (isset($this->methodDocBlocks[$classInHierarchy][$method])) {
+            return $this->methodDocBlocks[$classInHierarchy][$method];
         }
 
         try {
-            $reflection = new \ReflectionMethod($class, $method);
-        } catch (\ReflectionException $e) {
+            $reflection = new ReflectionMethod($classInHierarchy, $method);
+            // @codeCoverageIgnoreStart
+        } catch (ReflectionException $e) {
             throw new Exception(
                 $e->getMessage(),
                 (int) $e->getCode(),
                 $e
             );
         }
+        // @codeCoverageIgnoreEnd
 
-        return $this->methodDocBlocks[$class][$method] = DocBlock::ofMethod($reflection);
+        return $this->methodDocBlocks[$classInHierarchy][$method] = DocBlock::ofMethod($reflection, $classInHierarchy);
     }
 }

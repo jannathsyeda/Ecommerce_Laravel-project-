@@ -2,12 +2,12 @@
 
 namespace Facade\Ignition\SolutionProviders;
 
-use Throwable;
-use ParseError;
-use Illuminate\Support\Str;
 use Facade\IgnitionContracts\BaseSolution;
 use Facade\IgnitionContracts\HasSolutionsForThrowable;
+use Illuminate\Support\Str;
+use ParseError;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 
 class MergeConflictSolutionProvider implements HasSolutionsForThrowable
 {
@@ -17,7 +17,7 @@ class MergeConflictSolutionProvider implements HasSolutionsForThrowable
             return false;
         }
 
-        if (! Str::startsWith($throwable->getMessage(), 'syntax error, unexpected \'<<\'')) {
+        if (! $this->hasMergeConflictExceptionMessage($throwable)) {
             return false;
         }
 
@@ -57,5 +57,20 @@ class MergeConflictSolutionProvider implements HasSolutionsForThrowable
         }
 
         return $branch;
+    }
+
+    protected function hasMergeConflictExceptionMessage(Throwable $throwable): bool
+    {
+        // For PHP 7.x and below
+        if (Str::startsWith($throwable->getMessage(), 'syntax error, unexpected \'<<\'')) {
+            return true;
+        }
+
+        // For PHP 8+
+        if (Str::startsWith($throwable->getMessage(), 'syntax error, unexpected token "<<"')) {
+            return true;
+        }
+
+        return false;
     }
 }
